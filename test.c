@@ -33,9 +33,7 @@ int main() {
     printf("입력하신 두 정수를 8진수로 나타내면 %o와 %o가 되고,\n", num01, num02);
     printf("입력하신 두 정수를 16진수로 나타내면 %x와 %x가 됩니다.\n", num01, num02);
   
-    short 2bytes 65536
-    int 4bytes 
-    long 8bytes 
+   
     return 0;
     
     unsigned long num=  4294967295; // int형 타입이 저장할수 있는 최댓값
