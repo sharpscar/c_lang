@@ -1,7 +1,7 @@
 #include <stdio.h>
 // 두 수중 더 큰수를 리턴한다.
 void play_for();
-void rplay_for();
+void r_play_for();
 void play_while();
 void r_play_while();
 
@@ -51,7 +51,7 @@ void play_for()
     }
 }
 
-void rplay_for()
+void r_play_for()
 {
     for (int i=10; i>0; i--)
     {
