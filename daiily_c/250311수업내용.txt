@@ -1,0 +1,69 @@
+float는 소수점 6째자리 까지
+Double은 소수점 10째자리 까지 
+
+계산상 실수부가 넘어가는 순간 반올림 해야한다. 
+
+printf(%f %f , 0.1 + 0.1)
+
+0.1과 0.2를 더하려했다. 그런데 
+0.3000000119 나와버렸다. 
+- 가장 가까운수를 가져와서 처리하는 컴퓨터 --
+그러니까 여섯째 자리에서 반올림 해서 처리해야하는 이슈?
+float와 double의 표현방식의 차이가 있다. 
+
+
+scanf를 이용해 int 변수 a에 123z를 넣는데
+1,2,3,z? 정수가 끝났다 생각한다. 그래서 123만 a에 넣는다.
+그럼z는 여전히 버퍼안에 남아있게된다. 출력을 기다리는 버퍼에는
+z가들어있다 
+
+getchar() 를 이용하면 한번 사용자 입력을 한번 털고간다. 
+
+페이지 117연습문제
+
+
+
+쌍따옴표는 문자 열이다. 
+char b[] = "아브라카타브라" + \0 문자의 끝을 나타내는 \0
+참조 : https://dojang.io/mod/page/view.php?id=328
+
+
+
+
+문자와 문자열은 다르다. 'a' != "a" 는 다르다 
+56 과 ['a'] 자료형 자체가 다르다. 
+*/
+// printf("%d", 'a'=="a");
+printf("%d\n", 'a');
+printf("%d", "a");
+
+
+
+int main()
+{
+ 
+    char a = 'a';
+    char b[] = "ABC";
+    char c[] = "안녕하세요";
+
+    printf("%zd\n", sizeof(b)/sizeof(char));
+    printf("%zd\n", sizeof(c)/sizeof(char));
+
+    printf("%ld\n",strlen(b));
+    printf("%ld\n",strlen(c));
+    
+    
+    return 0;
+
+}
+
+
+#define PI 3.141592 //전처리기 
+
+
+#include <limits.h> 로 라이브러리를 가져와서
+printf("%d\n", SHRT_MAX); 로 shorts 의 크기를 확인이 가능하다. 
+마찬가지로 int long char 모두 크기 확인이 가능하므로 외우지말자. 
+책에는 131페이지에 나와있으니 참고 
+
+
