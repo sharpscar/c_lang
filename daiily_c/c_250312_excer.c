@@ -26,6 +26,7 @@ void star_04();
 
 int main()
 {
+    ex_07();
     // ex_01();
     // ex_02();
     // ex_08();
@@ -33,7 +34,7 @@ int main()
     // star_01();
     // star_02();
     // star_03();
-    star_04();
+    // star_04();
 
     return 0;
 }
@@ -284,33 +285,19 @@ void ex_08()
 
 void ex_07()
 {
-    //도전 실패!
-    //단어 하나를 읽어 문자 배열에 저장한다.
-    // char word_[20];
+
+    char word_[20];
     // char c_arr[10][20];
-    // int cnt;
-    // bool status;
-    
-    
-    // cnt =0;
-    
-    // // 1. 입력을 받는다
-    // printf("단어를 입력하세요");
-    // scanf("%s\n",word_);
+    int word_len;
+    //사용자로부터 입력을 받는다. 
+    printf("단어를 입력해주세요 ");
+    scanf("%s", word_);
 
+    word_len = strlen(word_);
 
-    // // 2. 받은걸 넣는다.
-    // //  크기 = (int)strlen(word_) <-- 단어의 길이 관련 제한 하거나 배열이 1차원 배열일땐 크기를 지정해서 넣거나 해야겠지?
-    // c_arr[0][0] = word_;
-    // printf("%s\n", c_arr[0][0]);
-
-    // 3. 반복한다.
-    // for (int i=0; i<10; i++)
-    // {
-    //     c_arr[i] = word_;
-    // }
-
-
-    // 4. 출력은 거꾸로한다.    
+    for(int i=word_len; i >= 0; i--)
+    {
+        printf("%c\n",word_[i]);
+    }
 
 }
