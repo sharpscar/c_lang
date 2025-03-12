@@ -14,8 +14,8 @@ int main()
     printf("Gustav");
     printf("Mahler\n");
 
-    printf("이름 :박경태\n");
-    printf("주소 :인천시 강화군 고식이길 78번길 7-1 주황기와 \n");
+    printf("이름 :\n");
+    printf("주소 :\n");
 
 
     /** 프린트문을 두번 써서 한라인에 출력해보도록해라! */

@@ -1,11 +1,9 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h> 
 #include <float.h> 
 #define GELON 3.785
 #define MILE 1.609
-
-
+void ex_1();
+void ex_2();
 void ex_3();
 void ex_4();
 void ex_5();
@@ -18,21 +16,38 @@ int main(void)
 
 // const float GELON = 3.785;
 // const float MILE = 1.609;
-
-
-    
-
+    // ex_1();
+    ex_2();
     // ex_3();
     // ex_4();
     // ex_5();
     // ex_6();
     // ex_7();
-    ex_8();
+    // ex_8();
     return 0;
-
+}
+void ex_1()
+{
+    char name1[10];
+    char name2[10];
+    printf("이름을 입력하세요\n");
+    scanf("%s",name1);
+    printf("성을 입력하세요\n");
+    scanf("%s",name2);
+    printf("%s %s", name1, name2);
+}
+void ex_2()
+{
+    char name1[10];
+    char name2[10];
+    printf("이름을 입력하세요\n");
+    // scanf("%s",name1);    
+    // printf("\"%s\"", name1);    
+    scanf("%s",name1); //\"%20s\"\n
+    printf("\"%20s\"\n", name1);
+    
 
 }
-
 
 void ex_3()
 {
@@ -40,8 +55,6 @@ void ex_3()
     // printf("%f", my_val);
     printf("%.3e1", my_val*0.1);
 }
-
-
 void ex_4()
 {
     float my_height = 6.208;
@@ -49,8 +62,6 @@ void ex_4()
     scanf("input %f", &my_height);
     printf("Dabney씨, 당신의 키는 %.3f 피트 입니다.",my_height/2.54);
 }
-
-
 void ex_5()
 {
     /**
@@ -66,8 +77,6 @@ void ex_5()
         speed,file_size, (file_size*1024*1024 *8)/(speed*1024*1024));
 
 }
-
-
 void ex_6()
 {
     /**
@@ -84,8 +93,6 @@ void ex_6()
     //변수를 printf의 %와 d사이에 넣고싶다...
     printf("%d %7d",sizeof(s1),sizeof(s2));
 }
-
-
 void ex_7()
 {
     /*
