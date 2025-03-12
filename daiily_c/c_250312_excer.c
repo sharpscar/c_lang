@@ -19,8 +19,10 @@ void ex_10();
 // void ex_16();
 // void ex_17();
 // void ex_18();
-
 void star_01();
+void star_02();
+void star_03();
+void star_04();
 
 int main()
 {
