@@ -31,55 +31,108 @@ int main()
                 printf("콜라를 선택하셨습니다.");
                 printf("몇개를 사시겠습니까?");
                 scanf("%d", &quantity);
-                
-                if(money < 800)
-                {
-                    printf("금액이 부족합니다.");
 
-                }else{
-                    //scanf 
-                    // 총 비용을 계신   total_fee = 800 * quantity
-                    total_ = 800* quantity;
-                    //주문 실행!
-                    printf("콜라를 드립니다.");
-                    money= money-800;
-                    printf("음료를 추가 구매하시겠습니까? y/n");
-                    scanf("%c",answer);
-                    // 여기서 y이면 메뉴화면으로 점프 n이면 잔돈 여부를 묻는다. 
-                    printf("%c", answer);
-                    if(answer =="y"){
-                        //go to menu 
-                    }else{
-                        //go to get_change<-- 머니의 남은돈을 전부 돌려주고 money = 0으로 초기화
+                // printf("%d", quantity);
+                // printf("예상총금액은 %d\n", 800*quantity);
+                total_ = 800 *quantity;
+
+                // 소지금이 구매하려는 물품보다 더 많거나 같을때
+                if (money >= total_)
+                {
+                    money = money - total_;
+                    printf("콜라 %d개 구매 하셨습니다. 잔액은 %d입니다.\n ", quantity, money);
+
+                    //구매종료 의사 물어본다.
+                    printf("구매를 종료하시겠습니까?[잔돈반환] y/n)  :");
+
+                    getchar();
+
+                    scanf("%c", &answer);
+                    if(answer =='y')
+                    {
+                        // 1. 잔돈여기있습니다  2. money = 0으로 초기화
+                        printf("잔돈입니다.%d원", money);
+                        money=0;
+                    }else if(answer =="n"){
+                        // 1. 잔돈은 그대로 시스템이 갖고있는다 2. 메뉴로 간다.
+                    }
+                // 소지금이 구매하려는 물품보다 더 많지 않을때
+                }else if(money < total_)
+                {
+                    printf("구매하시려는 물품을 사시기에는 돈이 %d 만큼 부족합니다.", total_-money);
+                    //구매종료 의사 물어본다.
+                    printf("구매를 종료하시겠습니까?[잔돈반환] y/n\n");
+
+                    getchar();
+                    
+                    scanf("%c", &answer);
+                    
+                    // printf("answer    %c",answer);
+                    //여기서 y를 눌러봐야 잔돈은 없기때문에 어차피 무쓸모긴한데 뭐. 넣었다.어쨋든 두상황 모두 돈이 없이 메뉴선택화면으로 간다.
+                    if(answer=='y')
+                    {   
+                        // 1. 잔돈여기있습니다  2. money = 0으로 초기화
+                        printf("잔돈%d원 입니다.\n", money);
+                    }else if(answer =='n'){
+                        // 1. 잔돈은 그대로 시스템이 갖고있는다 2. 메뉴로 간다.
                     }
                 }
+                
+                
             }else if(n==2)
             {   
+               
+               
                 printf("사이다를 선택하셨습니다.");
                 printf("몇개를 사시겠습니까?");
                 scanf("%d", &quantity);
-                
-                if(money < 700)
-                {
-                    printf("금액이 부족합니다.");
 
-                }else{
-                    //scanf 
-                    // 총 비용을 계신   total_fee = 800 * quantity
-                    total_ = 700* quantity;
-                    //주문 실행!
-                    printf("사이다를 드립니다.");
-                    money= money-800;
-                    printf("음료를 추가 구매하시겠습니까? y/n");
-                    scanf("%c",answer);
-                    // 여기서 y이면 메뉴화면으로 점프 n이면 잔돈 여부를 묻는다. 
-                    printf("%c", answer);
-                    if(answer =="y"){
-                        //go to menu 
-                    }else{
-                        //go to get_change<-- 머니의 남은돈을 전부 돌려주고 money = 0으로 초기화
+                // printf("%d", quantity);
+                // printf("예상총금액은 %d\n", 800*quantity);
+                total_ = 700 *quantity;
+
+                // 소지금이 구매하려는 물품보다 더 많거나 같을때
+                if (money >= total_)
+                {
+                    money = money - total_;
+                    printf("콜라 %d개 구매 하셨습니다. 잔액은 %d입니다.\n ", quantity, money);
+
+                    //구매종료 의사 물어본다.
+                    printf("구매를 종료하시겠습니까?[잔돈반환] y/n)  :");
+
+                    getchar();
+
+                    scanf("%c", &answer);
+                    if(answer =='y')
+                    {
+                        // 1. 잔돈여기있습니다  2. money = 0으로 초기화
+                        printf("잔돈입니다.%d원", money);
+                        money=0;
+                    }else if(answer =="n"){
+                        // 1. 잔돈은 그대로 시스템이 갖고있는다 2. 메뉴로 간다.
                     }
-                }                
+                // 소지금이 구매하려는 물품보다 더 많지 않을때
+                }else if(money < total_)
+                {
+                    printf("구매하시려는 물품을 사시기에는 돈이 %d 만큼 부족합니다.", total_-money);
+                    //구매종료 의사 물어본다.
+                    printf("구매를 종료하시겠습니까?[잔돈반환] y/n\n");
+
+                    getchar();
+                    
+                    scanf("%c", &answer);
+                    
+                    // printf("answer    %c",answer);
+                    //여기서 y를 눌러봐야 잔돈은 없기때문에 어차피 무쓸모긴한데 뭐. 넣었다.어쨋든 두상황 모두 돈이 없이 메뉴선택화면으로 간다.
+                    if(answer=='y')
+                    {   
+                        // 1. 잔돈여기있습니다  2. money = 0으로 초기화
+                        printf("잔돈%d원 입니다.\n", money);
+                    }else if(answer =='n'){
+                        // 1. 잔돈은 그대로 시스템이 갖고있는다 2. 메뉴로 간다.
+                    }
+                }
+                              
             }else if(n==3)
             {
                 printf("이온음료를 선택하셨습니다.");
