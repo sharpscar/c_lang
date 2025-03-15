@@ -3,11 +3,16 @@
 #include <time.h>
 #define SIZE 7
 
+int compare_two_list(int list[], int user_in_list[]);
+
 int * make_r_number_list();
 int make_r_number();
 int is_in(int number, int list[], int index);
 int main()
 {   
+    char do_you_want_generate_com_number ;
+    char *eval_lotto;
+    int win_cnt;
     int user_in_list[SIZE];
     //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
     user_in_list[0]= 2;
@@ -23,12 +28,79 @@ int main()
 
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
 
+    //
+    do_you_want_generate_com_number = 'n'; // 사용자가 자동 돌리기 싫대 
+
+    if(do_you_want_generate_com_number=='n')
+    {
+        //당첨조회를 합시다. 당첨번호의 갯수에 따라 등수를 평가하는 함수 
+        win_cnt = compare_two_list(r_list, user_in_list);
+
+         
+        
+
+      //다시 24라인으로 돌아가서 랜덤한 번호를 생성하고 - 약 1초 휴식 재생성 프린트 반복
+    }else if(do_you_want_generate_com_number='y')
+    {
+        // 약 1초 휴식 재생성 프린트 반복하는 기능 추가 예정
+        r_list = make_r_number_list();
+    }
+        
+
     // 자동돌릴건지에서 사용자 입력이 False일땐 당첨조회
     // 당첨조회 user_in_list와 r_list를 비교! 
 
 
     //게임 계속할건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 사용자입력 부분으로 다시 돌아간다.
     return 0;
+}
+
+
+
+int compare_two_list(int com_list[], int user_in_list[])
+{
+    int wincnt=0;
+    //여기서 주의해야 할건 컴퓨터의 배열은 7개 유저의 배열은 6개의 요소가 있다.
+    //2등의 경우 컴배열의 마지막 요소가 유저 리스트에 있는경우 이다.
+    // 파이썬에선 intersection? 교집합 기능을 이용해서 몇갠지 확인했다. 
+
+    for(int i=0; i<SIZE-1;i++)
+    {
+        for (int j=0; j<SIZE-1;j++)
+        {
+            if (com_list[i]==user_in_list[j])
+            {
+                wincnt++;
+            }
+        }
+    }
+    // wincnt 의 갯수에 따라 등수를 리턴하자
+    if (wincnt==6)
+    {
+        return 1;
+    }else if(wincnt==5)
+    {
+        //2등인경우
+        for(int k=0; k<SIZE-1;k++)
+        {
+            if(user_in_list[k]==com_list[6])
+            {
+                return 2;
+            }
+        }
+        //3등인 경우 
+        return 3;
+    }else if(wincnt==4)
+    {
+        return 4;
+    }else if(wincnt==3)
+    {
+        return 5;
+    }else{
+        return 0; //꽝 ㅋ
+    }
+    
+    // return wincnt;
 }
 
 int * make_r_number_list()
