@@ -36,13 +36,17 @@ int main()
         //당첨조회를 합시다. 당첨번호의 갯수에 따라 등수를 평가하는 함수 
         win_cnt = compare_two_list(r_list, user_in_list);
 
+        //당첨결과 보여준다.
          
         
 
       //다시 24라인으로 돌아가서 랜덤한 번호를 생성하고 - 약 1초 휴식 재생성 프린트 반복
     }else if(do_you_want_generate_com_number='y')
     {
-        // 약 1초 휴식 재생성 프린트 반복하는 기능 추가 예정
+        /**
+         * 나중에.. 추가할 기능 자동을 돌린다는걸 5게임 만들어 진행해보자 r_list를 5개 생성해서 
+        // 5게임 세트로 구매하여 컴퓨터 번호와 비교하는 기능
+         */
         r_list = make_r_number_list();
     }
         
