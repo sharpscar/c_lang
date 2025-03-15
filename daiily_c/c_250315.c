@@ -8,12 +8,26 @@ int make_r_number();
 int is_in(int number, int list[], int index);
 int main()
 {   
+    int user_in_list[SIZE];
+    //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
+    user_in_list[0]= 2;
+    user_in_list[1]= 13;
+    user_in_list[2]= 15;
+    user_in_list[3]= 16;
+    user_in_list[4]= 33;
+    user_in_list[5]= 43;
+
+
+    // 컴퓨터가 랜덤한 7개의 번호를 생성
     int * r_list = make_r_number_list();
 
-    for (int i; i<7; i++)
-    {
-        printf("%d\n", r_list[i]);
-    }
+    //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
+
+    // 자동돌릴건지에서 사용자 입력이 False일땐 당첨조회
+    // 당첨조회 user_in_list와 r_list를 비교! 
+
+
+    //게임 계속할건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 사용자입력 부분으로 다시 돌아간다.
     return 0;
 }
 
