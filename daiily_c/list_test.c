@@ -3,19 +3,47 @@
 
 int compare_two_list(int com_list[], int user_in_list[]);
 
+int * get_input_numbers();
 
 int main()
 {
-    int a_mylist[SIZE] = {1,2,3,4,5,6,10};
-    int b_mylist[SIZE]={1,2,3,4,5,10};
-    int r;
+    // int a_mylist[SIZE] = {1,2,3,4,5,6,10};
+    // int b_mylist[SIZE]={1,2,3,4,5,10};
+    // int r;
 
-    r= compare_two_list(a_mylist,b_mylist);
+    // r= compare_two_list(a_mylist,b_mylist);
 
-    printf("%d\n", r);
+    // printf("%d\n", r);
+    
+    int * num_list;
+    
+    //사용자 입력을 받는 함수를 만들겠당!
+    
+    num_list=get_input_numbers();
 
+    for(int i=0;i<6;i++)
+    {
+        printf("%d\n",num_list[i]);
+    }
 
     return 0;
+}
+
+int * get_input_numbers()
+{
+    int input_list[6];
+    int i1,i2,i3,i4,i5,i6;
+   
+    printf("6개의 숫자를 입력해주세요\n");
+    for (int i=0; i<6; i++)
+    {
+        printf("%d번 번호를 눌러주세요: " , i+1);
+        scanf("%d", &input_list);
+        while(getchar() != '\n');
+    }
+
+
+    return input_list;
 }
 
 int compare_two_list(int com_list[], int user_in_list[])

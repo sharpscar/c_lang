@@ -7,6 +7,7 @@ int compare_two_list(int list[], int user_in_list[]);
 
 int * make_r_number_list();
 int make_r_number();
+int * user_input();
 int is_in(int number, int list[], int index);
 int main()
 {   
@@ -15,14 +16,16 @@ int main()
     int win_cnt;
     // int r_list[SIZE];
     int* r_list;
-    int user_in_list[SIZE-1];
+    int * user_in_list;
     //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
-    user_in_list[0]= 2;
-    user_in_list[1]= 13;
-    user_in_list[2]= 15;
-    user_in_list[3]= 16;
-    user_in_list[4]= 33;
-    user_in_list[5]= 43;
+    // user_in_list[0]= 2;
+    // user_in_list[1]= 13;
+    // user_in_list[2]= 15;
+    // user_in_list[3]= 16;
+    // user_in_list[4]= 33;
+    // user_in_list[5]= 43;
+
+    user_in_list = user_input();
 
     int com_list[SIZE];
     // 컴퓨터가 랜덤한 7개의 번호를 생성하여 포인터로 해당 배열위치를 가져옴
@@ -33,15 +36,19 @@ int main()
         com_list[i] = (int)r_list[i]; //그걸 다시 com_list 배열에 저장
         
     }
-    // for(int j=0; j<sizeof com_list/ sizeof com_list[0] ; j++)
-    // {
-    //     printf("%d\n", com_list[j]);
-    // }
+    for (int i=0; i<SIZE; i++)
+    {
+        printf("user_input검증 %d\n", user_in_list[i]);
+    }
+  
+    //되는거였다.. 
 
     
 
 
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
+
+
 
     //
     do_you_want_generate_com_number = 'n'; // 사용자가 자동 돌리기 싫대 
@@ -73,6 +80,23 @@ int main()
 
     //게임 계속할건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 사용자입력 부분으로 다시 돌아간다.
     return 0;
+}
+
+int * user_input()
+{   
+    int num1,num2,num3,num4,num5,num6;
+    int static nums[6];
+    int input_is_good;
+    
+    printf("정수를 한칸씩 띄어서 입력해주세요");
+    scanf("%d %d %d %d %d %d", &num1,&num2,&num3,&num4,&num5,&num6);
+    nums[0] = num1;
+    nums[1] = num2;
+    nums[2] = num3;
+    nums[3] = num4;
+    nums[4] = num5;
+    nums[5] = num6;
+    return nums;
 }
 
 
