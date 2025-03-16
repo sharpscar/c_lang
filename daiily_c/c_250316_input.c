@@ -1,16 +1,28 @@
 #include <stdio.h>
 int * user_input();
-
+char get_input_more_game();
 int main()
 {
-    int * nums;
-    nums= user_input();
+    // int * nums;
+    // nums= user_input();
 
-    for (int i=0; i<7;i++)
-    {
-        printf("%d\n",nums[i]);
-    }
+    // for (int i=0; i<7;i++)
+    // {
+    //     printf("%d\n",nums[i]);
+    // }
+    char answer;
+    answer = get_input_more_game();
+    printf("%c\n", answer);
+
     return 0;
+}
+
+char get_input_more_game()
+{
+    char answer;
+    printf("게임을 한번 더 하시겠습니까? y(번호입력)/n(회차 자동진행)");
+    scanf("%c",&answer);
+    return answer;
 }
 
 

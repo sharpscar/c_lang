@@ -9,6 +9,8 @@ int * make_r_number_list();
 int make_r_number();
 int * user_input();
 int is_in(int number, int list[], int index);
+int get_input_more_game();
+
 int main()
 {   
     char do_you_want_generate_com_number ;
@@ -17,6 +19,9 @@ int main()
     // int r_list[SIZE];
     int* r_list;
     int * user_in_list;
+    int static cnt;
+    char answer;
+
     //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
     // user_in_list[0]= 2;
     // user_in_list[1]= 13;
@@ -36,40 +41,53 @@ int main()
         com_list[i] = (int)r_list[i]; //그걸 다시 com_list 배열에 저장
         
     }
-    for (int i=0; i<SIZE; i++)
-    {
-        printf("user_input검증 %d\n", user_in_list[i]);
-    }
+    // for (int i=0; i<SIZE-1; i++)
+    // {
+    //     printf("user_input검증 %d\n", user_in_list[i]);
+    // }
   
     //되는거였다.. 
 
-    
-
-
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
+    // int로 바꿈 .. y n 인식불가 -추후 확인
+    answer = get_input_more_game();
+    printf("%d", answer);
 
 
 
     //
-    do_you_want_generate_com_number = 'n'; // 사용자가 자동 돌리기 싫대 
+    do_you_want_generate_com_number = answer; // 사용자가 자동 돌리기 싫대 
 
-    if(do_you_want_generate_com_number=='n')
+    //0이면 n 선택과 같다. 게임을 더 하겠냐? 라는질문이었다.
+    if(do_you_want_generate_com_number==0)
     {
         //당첨조회를 합시다. 당첨번호의 갯수에 따라 등수를 평가하는 함수 
         win_cnt = compare_two_list(com_list, user_in_list);
 
+        //회차번호 
+        cnt++;
         //당첨결과 보여준다.
-        printf("%d등입니다. - 0이면 꼴등");
+        printf("%d회차 ,%d등입니다. - 0이면 꼴등",cnt,win_cnt);
         
 
-      //다시 24라인으로 돌아가서 랜덤한 번호를 생성하고 - 약 1초 휴식 재생성 프린트 반복
-    }else if (do_you_want_generate_com_number=='y')
+    // 1이면 y 선택이다. 유저는 게임을 한번더 하고싶다.
+    }else if (do_you_want_generate_com_number==1)
     {
         /**
          * 나중에.. 추가할 기능 자동을 돌린다는걸 5게임 만들어 진행해보자 r_list를 5개 생성해서 
         // 5게임 세트로 구매하여 컴퓨터 번호와 비교하는 기능
          */
         // r_list = make_r_number_list();
+        r_list = make_r_number_list();
+
+        user_in_list = user_input();
+
+        win_cnt = compare_two_list(com_list, user_in_list);
+
+        //cnt 변수 추가해서 출력해줘야함 
+        cnt++;
+        printf("%d회차 당첨번호 입니다. %d,%d,%d,%d,%d,%d 그리고 보너스번호 %d",cnt, r_list[0],r_list[1],r_list[2],r_list[3],r_list[4],r_list[5],r_list[7]);
+
 
     }
         
@@ -82,6 +100,24 @@ int main()
     return 0;
 }
 
+
+
+int get_input_more_game()
+{
+    char answer;
+    printf("게임을 한번 더 하시겠습니까? y(번호입력)/n(회차 자동진행)");
+    scanf("%c",&answer);
+    getchar();
+    getchar();
+    
+    if(answer == 'y')
+    {
+        return 1;
+    }else 
+    {
+        return 0;
+    }
+}
 int * user_input()
 {   
     int num1,num2,num3,num4,num5,num6;
