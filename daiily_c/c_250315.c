@@ -14,7 +14,7 @@ int main()
     char *eval_lotto;
     int win_cnt;
     // int r_list[SIZE];
-    int * r_list;
+    int* r_list;
     int user_in_list[SIZE-1];
     //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
     user_in_list[0]= 2;
@@ -24,9 +24,17 @@ int main()
     user_in_list[4]= 33;
     user_in_list[5]= 43;
 
-
-    // 컴퓨터가 랜덤한 7개의 번호를 생성
+    int com_list[SIZE];
+    // 컴퓨터가 랜덤한 7개의 번호를 생성하여 포인터로 해당 배열위치를 가져옴
     r_list = make_r_number_list();
+
+    for (int i=0 ; i< SIZE; i++)
+    {
+        com_list[i] = (int)r_list[i]; //그걸 다시 com_list 배열에 저장
+        // printf("%d\n", mylist[i]);
+    }
+
+    
 
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
 
@@ -36,10 +44,10 @@ int main()
     if(do_you_want_generate_com_number=='n')
     {
         //당첨조회를 합시다. 당첨번호의 갯수에 따라 등수를 평가하는 함수 
-        win_cnt = compare_two_list(r_list, user_in_list);
+        win_cnt = compare_two_list(com_list, user_in_list);
 
         //당첨결과 보여준다.
-         
+        printf("%d등입니다. - 0이면 꼴등");
         
 
       //다시 24라인으로 돌아가서 랜덤한 번호를 생성하고 - 약 1초 휴식 재생성 프린트 반복
@@ -114,8 +122,8 @@ int * make_r_number_list()
 {
 
    //로또 번호를 생성한다.
-   int lotto_n[SIZE] ;
-   int index =0;
+    int static lotto_n[SIZE] ;
+    int index =0;
    //중복 검사를 한다. 
 
     for (int i =0; i<SIZE; i++)
