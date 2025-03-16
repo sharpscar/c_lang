@@ -28,13 +28,18 @@ int main()
     // 컴퓨터가 랜덤한 7개의 번호를 생성하여 포인터로 해당 배열위치를 가져옴
     r_list = make_r_number_list();
 
-    for (int i=0 ; i< SIZE; i++)
+    for(int i=0 ; i<SIZE; i++)
     {
         com_list[i] = (int)r_list[i]; //그걸 다시 com_list 배열에 저장
-        // printf("%d\n", mylist[i]);
+        
     }
+    // for(int j=0; j<sizeof com_list/ sizeof com_list[0] ; j++)
+    // {
+    //     printf("%d\n", com_list[j]);
+    // }
 
     
+
 
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
 
@@ -162,9 +167,6 @@ int make_r_number()
     int r_number;
     int flag;
 
-    r_number = (rand()%45) +1;
-   
-    printf("%d\n", r_number);
-    
+    r_number = (rand()%45) +1; 
     return r_number;
 }

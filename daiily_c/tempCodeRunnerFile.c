@@ -1,6 +1,4 @@
-if((r_number < 0) || (r_number >45 ))
+for (int j=0; j<SIZE; j++)
     {
-        flag = 1;
-    }else{
-        flag = 0;
+        printf("%d\n", com_list[j]);
     }

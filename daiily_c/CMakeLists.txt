@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.10)  # 최소 CMake 버전 설정
+c_lang  # 프로젝트 이름 설정
+
+# 실행 파일을 추가 (main.c는 실제 소스 파일 이름에 맞게 변경)
+add_executable(my_program main.c)
