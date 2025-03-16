@@ -13,7 +13,9 @@ int main()
     char do_you_want_generate_com_number ;
     char *eval_lotto;
     int win_cnt;
-    int user_in_list[SIZE];
+    // int r_list[SIZE];
+    int * r_list;
+    int user_in_list[SIZE-1];
     //사용자 입력을 받는 부분 우선더미데이터로 시작 - 사실 어제 추첨된번호!
     user_in_list[0]= 2;
     user_in_list[1]= 13;
@@ -24,7 +26,7 @@ int main()
 
 
     // 컴퓨터가 랜덤한 7개의 번호를 생성
-    int * r_list = make_r_number_list();
+    r_list = make_r_number_list();
 
     //자동을 돌릴건지 물어보는 부분 [[사용자 입력]] 여기서 y가 입력되면 컴퓨터의 자동번호 생성으로 다시돌아간다.
 
@@ -41,13 +43,14 @@ int main()
         
 
       //다시 24라인으로 돌아가서 랜덤한 번호를 생성하고 - 약 1초 휴식 재생성 프린트 반복
-    }else if(do_you_want_generate_com_number='y')
+    }else if (do_you_want_generate_com_number=='y')
     {
         /**
          * 나중에.. 추가할 기능 자동을 돌린다는걸 5게임 만들어 진행해보자 r_list를 5개 생성해서 
         // 5게임 세트로 구매하여 컴퓨터 번호와 비교하는 기능
          */
-        r_list = make_r_number_list();
+        // r_list = make_r_number_list();
+
     }
         
 
@@ -127,7 +130,7 @@ int * make_r_number_list()
            index++;
        }
        
-       printf("%d\n", lotto_n[i]);
+    //    printf("%d\n", lotto_n[i]);
     }
     return lotto_n;
 }
