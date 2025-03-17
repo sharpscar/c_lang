@@ -10,11 +10,11 @@ int check_boss_battle();
 int monster_appear(int *,int ,int);
 void introduce_apear_monster(int*);
 int * battle_boss_monster(int * ,int );
-int * battle_nomal_monster(int *);
+int * battle_nomal_monster(int *, int*, int);
 int hit_hp(int hp, int ad);
 int main()
 {
-    int potion[1][1]; //층수 / 포션 유무
+    int potion[30]={1}; //층수 / 포션 유무
     int is_boss=0;
     int cnt_battle=0;
     int c_tier=0;
@@ -51,18 +51,16 @@ int main()
     }else if(is_boss==1)
 
     {
-        my_status = battle_nomal_monster(my_status); // 일반 몬스터와 대결후 내 몬스터 상태를 리턴        
-        
+        // 일반 몬스터와 대결후 내 몬스터 상태를 리턴 5번인덱스에 포션 사용했는지 까지 기록해서 리턴하자 사용했으면 다음전투에서 사용불가
+        my_status = battle_nomal_monster(my_status,potion,c_tier); 
+        // 그리고 한번더 싸우시겠습니까 사용자 입력을 받아야 한다. - 원하면 한번더 싸움
     }
     
-
-    //전투 진행 선공은 1.레벨이 높음 2. 동렙일경우 몬스터부터 공격 
-    //전투시 1턴에 각 1번씩 공격이 이루어짐
-    // 각 1번씩 공격이 끝나면 포션 드링킹 마시겠냐 질문 - 포션은 1층에 한번씩만 제공 |사용자입력
 
 
     // 전투 결과를 발표 turn_cnt, gain_exp, 기존lv,hp,ad 변화를 보여준다.
 
+     
     // 다음층 올라갈지? | 사용자입력
 
         // n이면 전투 1번더한다.
@@ -75,10 +73,11 @@ int main()
   
 
 }
-int* battle_nomal_monster(int *my_status)
+int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
 {
     int randint;
     int turn=0;
+    char answer;
     //일반몬스터 상태 계산 
     randint = (-1 +rand() %5);
     //일반몬스터이다. 내 레벨을 가져와야한다. 
@@ -91,7 +90,9 @@ int* battle_nomal_monster(int *my_status)
     int my_hp = my_status[2];
     int my_ad = my_status[3];
     int my_exp = my_status[4];
+    srand((unsigned int)time(NULL));
     
+
     printf("유저 복켓몬 레벨은 %d이며 현재 hp는 %d 공격력은 %d 입니다.\n ",my_lv, my_hp, my_ad);
     printf("일반 몬스터 레벨은 %d이며 현재 hp는 %d 공격력은 %d 입니다.\n ",mon_lv, mon_hp, mon_ad);
 
@@ -99,26 +100,57 @@ int* battle_nomal_monster(int *my_status)
     {     
         // user의 hp가 0밑으로 떨어지거나 몬스터의 hp가 0으로 떨어지면 게임 종료
         mon_hp = hit_hp(mon_hp, my_ad);
+        printf("[System!] 복켓몬이 상대몬스터에게 %d만큼의 피해를 입혔습니다.",my_ad); //추후 시스템 프린트 함수로 묶어서 출력
         my_hp = hit_hp(my_hp, mon_ad);
+        printf("[System!] 몬스터가 복켓몬 몬스터에게 %d만큼의 피해를 입혔습니다.",mon_ad);
 
-        if(mon_hp==0)
+        // 해당층에서 1번만 주어지는 혜택을 사용하겠는가?
+        if(potion[c_tier]==1)
+        {
+            //사용자 입력 받는곳 추후 potion의 배열에 1이 있으면 으로 조건문을 삽입 if (my_hp <=50%) &&(potion[c_tier] == 1) 
+            printf("복켓몬의 hp가 %d입니다. 회복을원하시면 (h)eal을 입력하세요 ) :\n",my_hp);
+            scanf("%c",&answer);
+            if(answer = 'y')
+            {
+                //복켓몬의 hp가 my_status[2]여기에 저장되어이 있던 수치 그대로 다시 조정
+                my_hp = my_status[2];
+                //그리고 potion[c_tier] = 0 으로 설정
+                potion[c_tier] = 0;
+            }
+        }
+
+        if(mon_hp<=0)
         {
             //유저가 이긴상황이다.
             printf("유저 복켓몬이 미약한 힘으로 %d 턴만에 상대 몬스터를 제압했습니다. 남은 hp는 %d이며 .\n",turn, my_hp);
+
+            // 30~50 렌덤하게 수치를 넣는다. 100이 넘어가면 레벨이 1씩증가하고 나머지를 exp에저장하는 구조가 좋을듯
+            randint = (30 +rand() %50);
+            printf("[System!] 현재 경험치는 %d이며 획득 경험치는 %d입니다.",my_exp, randint);
+            my_exp = my_exp + randint;
+
+            // 만약에 my_exp가 100이상일경우 레벨업1 추가 해야함  exp_calc함수를 만들자
+            // exp_calc(my_exp) { my_exp /100 의 값을 float로 리턴 1.실수는 다시 exp의 잔존경험치로 저장 }
+            
+            
+            // 획득경험치 복켓몬에 적용후 알려주기
             break;
-        }else if(my_hp==0)
+        }else if(my_hp<=0)
         {
             // 사실 포션을 이용해서 부활시켜야할거같다. 아쉽
             printf("유저 복켓몬이 상대 몬스터에게 %d턴만에 제압당하여 갖고있는 돈과 명예를 모두 잃었습니다 -game over 몬스터의 남은 체력 :%d",turn, mon_hp);
+            // 리셋후 게임재시작
             break;
         }
 
         turn++;
     }
 
-    // 싸움 종료후 복켓몬 변수에 값을 저장해야한다. - 남은 전투후 경험치는 30~70%정도 렌덤하게 추가해서 100이 넘어가면 레벨이 1씩증가하고 나머지를 exp에저장하는 구조가 좋을듯
+    // 싸움 종료후 복켓몬 변수에 값을 저장해야한다. - 
+    //전투후 경험치는 30~50 렌덤하게 수치를 넣는다. 100이 넘어가면 레벨이 1씩증가하고 나머지를 exp에저장하는 구조가 좋을듯
+    //보스몹의 경우 50%~70%정도 
 
-    // 그리고 한번더 싸우시겠습니까 사용자 입력을 받아야 한다. -이건 여기서할건 아니지
+    
     
 
 
@@ -177,7 +209,7 @@ int monster_appear(int *mystatus,int cnt_battle,int c_tier)
 }
 
 
-void show_current_tier(c_tier)
+void show_current_tier(int c_tier)
 {
     int tier = c_tier;
     printf("현재 %d층 진입했습니다.\n",tier);
@@ -190,13 +222,13 @@ void show_my_monster(int* status)
 {
     char mon_name[20];
     if (status[0]==1){
-        mon_name[20] = "Bulbasaur";
+        mon_name[20] = 'Bulbasaur';
     }else if (status[0]==2){
-        mon_name[20] = "Charmander";
+        mon_name[20] = 'Charmander';
     }else if (status[0]==3){
-        mon_name[20] = "Squirtle";
+        mon_name[20] = 'Squirtle';
     }else if (status[0]==4){
-        mon_name[20] = "pikachu";
+        mon_name[20] = 'pikachu';
     }
     
     int lv,hp,ad,exp;
