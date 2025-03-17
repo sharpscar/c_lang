@@ -3,6 +3,7 @@
         "stdio.h": "c",
         "random": "c",
         "stdlib.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "cmath": "c"
     }
 }
