@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+
+
 #define SIZE 7
 
 int compare_two_list(int list[], int user_in_list[]);
@@ -53,44 +56,45 @@ int main()
     answer = get_input_more_game();
     printf("%d", answer);
 
-
-
-    //
-    do_you_want_generate_com_number = answer; // 사용자가 자동 돌리기 싫대 
-
-    //0이면 n 선택과 같다. 게임을 더 하겠냐? 라는질문이었다.
-    if(do_you_want_generate_com_number==0)
+    do
     {
-        //당첨조회를 합시다. 당첨번호의 갯수에 따라 등수를 평가하는 함수 
-        win_cnt = compare_two_list(com_list, user_in_list);
+            /* code */
+            printf("게임을 한번 더하시겠습니까?");
+            scanf("%d",&answer);
+            win_cnt = compare_two_list(com_list, user_in_list);
+            cnt++;
+            printf("%d회차 , %d등입니다. - 6이면 꽝\n",cnt,win_cnt);        
 
-        //회차번호 
-        cnt++;
-        //당첨결과 보여준다.
-        printf("%d회차 ,%d등입니다. - 0이면 꼴등",cnt,win_cnt);
-        
+    } while (answer==0);    
 
-    // 1이면 y 선택이다. 유저는 게임을 한번더 하고싶다.
-    }else if (do_you_want_generate_com_number==1)
+    
+    while(1)
     {
-        /**
-         * 나중에.. 추가할 기능 자동을 돌린다는걸 5게임 만들어 진행해보자 r_list를 5개 생성해서 
+
+        //나중에.. 추가할 기능 자동을 돌린다는걸 5게임 만들어 진행해보자 r_list를 5개 생성해서 
         // 5게임 세트로 구매하여 컴퓨터 번호와 비교하는 기능
-         */
+          
         // r_list = make_r_number_list();
         r_list = make_r_number_list();
-
+    
         user_in_list = user_input();
-
+    
         win_cnt = compare_two_list(com_list, user_in_list);
-
+    
         //cnt 변수 추가해서 출력해줘야함 
         cnt++;
         printf("%d회차 당첨번호 입니다. %d,%d,%d,%d,%d,%d 그리고 보너스번호 %d",cnt, r_list[0],r_list[1],r_list[2],r_list[3],r_list[4],r_list[5],r_list[7]);
-
+        sleep(60);
+        
+        //getch 함수나 kbhit() 함수가 conio.h 헤더;; 리눅스계열에서는 쓸수없다. 어쨋든 키보드 입력을 받으면 break 하는 기능이 필요함
 
     }
-        
+                
+    
+
+    
+
+            
 
     // 자동돌릴건지에서 사용자 입력이 False일땐 당첨조회
     // 당첨조회 user_in_list와 r_list를 비교! 
@@ -105,7 +109,7 @@ int main()
 int get_input_more_game()
 {
     char answer;
-    printf("게임을 한번 더 하시겠습니까? y(번호입력)/n(회차 자동진행)");
+    printf("자동 돌리시겠습니까? y(회차 자동진행)/n(번호입력)");
     scanf("%c",&answer);
     getchar();
     getchar();
@@ -177,7 +181,7 @@ int compare_two_list(int com_list[], int user_in_list[])
     {
         return 5;
     }else{
-        return 0; //꽝 ㅋ
+        return 6; //꽝 ㅋ
     }
     
     // return wincnt;
