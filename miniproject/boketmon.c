@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 #define STATUS_SIZE 4
 
 int* choose_my_monster();
@@ -10,12 +11,14 @@ int check_boss_battle();
 int monster_appear(int *,int ,int);
 void introduce_apear_monster(int*);
 int* battle_boss_monster(int * ,int * ,int );
-int* battle_nomal_monster(int *, int*, int);
+int* battle_normal_monster(int *, int*, int);
 int hit_hp(int hp, int ad);
 // int* update_status(int *, int ,int);         // 전투 후 복켓몬의 상태를 업데이트한다.
 // float calc_exp(my_exp);
+bool player_die = false;
 int main()
 {
+    
     int potion[30]={1}; //층수 / 포션 유무
     int is_boss=0;
     int cnt_battle=0;
@@ -40,6 +43,13 @@ int main()
         
         show_current_tier(c_tier);
 
+        //플레이어가 죽으면 1층부터 다시간다. status 정보 리셋
+        if(player_die)
+        {
+            c_tier = 1;
+            cnt_battle=1;
+        }
+
         //이번 전투 횟수 가져와서 보스판인지 확인  bs_mon_name, bs_mon_hp,bs_mon_ad, bs_mon_lv
         cnt_battle+=1;
         is_boss =  monster_appear(my_status,cnt_battle, c_tier); //일반몹 등장 가능성을 이미 처리함
@@ -55,7 +65,7 @@ int main()
         }else if(is_boss==1)
         {
             // 일반 몬스터와 대결후 포션을 사용했으면 다음전투에서 사용불가 potion[c_tier] = 0 ; 처리 하면 됨!
-            my_status = battle_nomal_monster(my_status,potion,c_tier); 
+            my_status = battle_normal_monster(my_status,potion,c_tier); 
 
             //my_status 상태를 다시 확인해보고 
             
@@ -65,7 +75,7 @@ int main()
             // getchar();
             if(answer = 'n')
             {
-                my_status = battle_nomal_monster(my_status,potion,c_tier);  
+                my_status = battle_normal_monster(my_status,potion,c_tier);  
             }
             
         }
@@ -76,7 +86,7 @@ int main()
     }
 }
 
-int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
+int* battle_normal_monster(int *my_status,int *potion,int c_tier)
 {
     int gain_exp,randint;
     int turn=0;
@@ -138,7 +148,7 @@ int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
             if((my_exp+gain_exp)>=100){           
                 levelup  = (my_exp+gain_exp) /100; // 레벨업 숫자
                 gain_exp = (my_exp+gain_exp) % 100; // 남은 exp    
-                printf("[System!] 축하합니다. Level up!"); 
+                printf("[System!] 축하합니다. Level up!\n"); 
                 //레벨업 했을때에만 수치의 변화가 생겨야한다. 그 외에는 변화가 있어선 안된다.
                 my_status[1] = my_status[1] + levelup;
                 my_status[2] = my_status[1] * 10;
@@ -165,9 +175,18 @@ int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
             break;
         }else if(my_hp<=0)
         {
-            // 사실 포션을 이용해서 부활시켜야할거같다. 아쉽
+            
+            // 사실 포션을 이용해서 부활시켜야할거같다.  c_tier 정보도 리셋해야한다.
             printf("유저 복켓몬이 상대 몬스터에게 %d턴만에 제압당하여 갖고있는 돈과 명예를 모두 잃었습니다 -game over 몬스터의 남은 체력 :%d",turn, mon_hp);
             // 리셋후 게임재시작은 추후구현
+            printf("게임을 다시 진행하시겠습니까?");
+            scanf("%c", &answer);
+            if(answer='y')
+            {
+                my_status = choose_my_monster();
+                c_tier=1; // 죽었는데 13층에서 시작해 ㅠ
+                return my_status;
+            }
 
             break;
         }
@@ -261,7 +280,7 @@ int* battle_boss_monster(int *my_status,int *potion,int c_tier)
             if((my_exp+gain_exp)>=100){           
                 levelup  = (my_exp+gain_exp) /100; // 레벨업 숫자
                 gain_exp = (my_exp+gain_exp) % 100; // 남은 exp    
-                printf("[System!] 축하합니다. Level up!"); 
+                printf("[System!] 축하합니다. Level up!\n"); 
                 //레벨업 했을때에만 수치의 변화가 생겨야한다. 그 외에는 변화가 있어선 안된다.
                 my_status[1] = my_status[1] + levelup;
                 my_status[2] = my_status[1] * 10;
@@ -275,22 +294,23 @@ int* battle_boss_monster(int *my_status,int *potion,int c_tier)
                 my_status[4] = my_exp;
             }
 
-
-            // my_status[0] 0은 나중에 구현하기로한 포켓몬 이름 혹은 고유번호 식별자 정도이다. 아직은 변경하지 않는다.
-            // my_status = update_status( *my_status,levelup,my_exp);
-            
-            
-            
-            // 게임을 이긴상태에서 내 스테이터스를 보내지 않았기 때문에 해당층에 머물든 2층을가든 내스탯에 쓰레기값이 잔뜩들어온다.
-            //마찬가지로 내스탯이 쓰레기면 몬스터 스텟도 쓰레기로 잔뜩 
             return my_status;
 
             break;
         }else if(my_hp<=0)
         {
-            // 사실 포션을 이용해서 부활시켜야할거같다. 아쉽
+            // 사실 포션을 이용해서 부활시켜야할거같다.  c_tier 정보도 리셋해야한다.
             printf("유저 복켓몬이 상대 몬스터에게 %d턴만에 제압당하여 갖고있는 돈과 명예를 모두 잃었습니다 -game over 몬스터의 남은 체력 :%d",turn, mon_hp);
             // 리셋후 게임재시작은 추후구현
+            printf("게임을 다시 진행하시겠습니까?");
+            scanf("%c", &answer);
+            if(answer='y')
+            {
+                my_status = choose_my_monster();
+                player_die = true;
+                c_tier=1; // 죽었는데 13층에서 시작해 ㅠ
+                return my_status;
+            }
 
             break;
         }
@@ -329,12 +349,9 @@ int monster_appear(int *mystatus,int cnt_battle,int c_tier)
         }else{
             printf("아무것도 나타나지 않았습니다.. 서운한 정적만 감돕니다.");
             return 0;
-
-        }
-        
+        }        
     }
 }
-
 
 void show_current_tier(int c_tier)
 {
