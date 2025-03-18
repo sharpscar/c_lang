@@ -9,7 +9,7 @@ void show_current_tier();
 int check_boss_battle();
 int monster_appear(int *,int ,int);
 void introduce_apear_monster(int*);
-int* battle_boss_monster(int * ,int );
+int* battle_boss_monster(int * ,int * ,int );
 int* battle_nomal_monster(int *, int*, int);
 int hit_hp(int hp, int ad);
 // int* update_status(int *, int ,int);         // 전투 후 복켓몬의 상태를 업데이트한다.
@@ -19,7 +19,7 @@ int main()
     int potion[30]={1}; //층수 / 포션 유무
     int is_boss=0;
     int cnt_battle=0;
-    int c_tier=0;
+    int c_tier=1;
     char answer;
 
     int *current_tier;
@@ -34,13 +34,9 @@ int main()
     // 내 포켓몬 상태 hp 공격력 현재 층수 정보 표출  |bm_hp,bm_ad,bm_exp,tier_lv 
     show_my_monster(my_status);
 
-
-
-
     while(c_tier <31)
     {
             //1층 진입 안내  |current_tier 
-        c_tier +=1;
         
         show_current_tier(c_tier);
 
@@ -53,12 +49,12 @@ int main()
         
         if(is_boss==2)
         {
-            //int *boss_status;    //mon_name,hp,ad,lv,exp
-            my_status =battle_boss_monster(my_status,c_tier);
+            //int *boss_status;    //mon_name,hp,ad,lv,exp  보스 전투도 구현해야함!
+            my_status =battle_boss_monster(my_status,potion, c_tier);
             // 보스몬스터 상태계산 메서드, 출현 알림 
         }else if(is_boss==1)
         {
-            // 일반 몬스터와 대결후 내 몬스터 상태를 리턴 5번인덱스에 포션 사용했는지 까지 기록해서 리턴하자 사용했으면 다음전투에서 사용불가
+            // 일반 몬스터와 대결후 포션을 사용했으면 다음전투에서 사용불가 potion[c_tier] = 0 ; 처리 하면 됨!
             my_status = battle_nomal_monster(my_status,potion,c_tier); 
 
             //my_status 상태를 다시 확인해보고 
@@ -66,30 +62,28 @@ int main()
             // 그리고 한번더 싸우시겠습니까 사용자 입력을 받아야 한다. - 원하면 한번더 싸움
             printf("다음층으로 올라가시겠습니까? y:다음층 n:전투 ) :\n");
             scanf("%c",&answer);
-            getchar();
+            // getchar();
             if(answer = 'n')
             {
                 my_status = battle_nomal_monster(my_status,potion,c_tier);  
             }
             
         }
+
+        c_tier +=1;
+
         
     }
 }
 
-    
-    
-  
-
-
 int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
 {
-    int randint;
+    int gain_exp,randint;
     int turn=0;
     char answer;
     int levelup=0;   
 
-    float exp_calc_result;  //레벨업후 경험치 계산 결과
+    
     //일반몬스터 상태 계산 
     randint = (-1 +rand() %5);
     //일반몬스터이다. 내 레벨을 가져와야한다. 
@@ -110,13 +104,13 @@ int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
 
     while(1)
     {     
-        printf("[System!] %d 턴이 시작되었습니다..\n",turn +1); //추후 시스템 프린트 함수로 묶어서 출력
+        printf("[System!] %d 층의 %d 턴이 시작되었습니다..복켓몬의 렙은 %d 몬스터의 렙은 %d입니다.\n",c_tier, turn +1, my_lv, mon_lv); //추후 시스템 프린트 함수로 묶어서 출력
         // user의 hp가 0밑으로 떨어지거나 몬스터의 hp가 0으로 떨어지면 게임 종료
         mon_hp = hit_hp(mon_hp, my_ad);
         printf("[System!] 복켓몬이 상대몬스터에게 %d만큼의 피해를 입혔습니다, 몬스터의 hp는 %d입니다..\n",my_ad,mon_hp); //추후 시스템 프린트 함수로 묶어서 출력
         my_hp = hit_hp(my_hp, mon_ad);
         printf("[System!] 몬스터가 복켓몬 몬스터에게 %d만큼의 피해를 입혔습니다, 복켓몬의 hp는 %d입니다.\n",mon_ad,my_hp);
-
+        printf("                                                                    계속하려면 Enter!\n");
         // 해당층에서 1번만 주어지는 혜택을 사용하겠는가?
         if(potion[c_tier]==1)
         {
@@ -138,24 +132,23 @@ int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
             printf("유저 복켓몬이 미약한 힘으로 %d 턴만에 상대 몬스터를 제압했습니다. 남은 hp는 %d이며 .\n",turn+1, my_hp);
 
             // 30~50 렌덤하게 수치를 넣는다. 100이 넘어가면 레벨이 1씩증가하고 나머지를 exp에저장하는 구조가 좋을듯
-            randint = (30 +rand() %50);
-            printf("[System!] 현재 경험치는 %d이며 획득 경험치는 %d입니다.\n",my_exp, randint);
+            gain_exp = (30 +rand() %50);
+            printf("[System!] 현재 경험치는 %d이며 획득 경험치는 %d입니다.\n",my_exp, gain_exp);
 
-            if((my_exp+randint)>=100){           
-                levelup  = my_exp /100; // 레벨업 숫자
-                my_exp = my_exp % 100; // 남은 exp    
+            if((my_exp+gain_exp)>=100){           
+                levelup  = (my_exp+gain_exp) /100; // 레벨업 숫자
+                gain_exp = (my_exp+gain_exp) % 100; // 남은 exp    
                 printf("[System!] 축하합니다. Level up!"); 
                 //레벨업 했을때에만 수치의 변화가 생겨야한다. 그 외에는 변화가 있어선 안된다.
                 my_status[1] = my_status[1] + levelup;
-                my_status[2] = my_status[2] * 10;
-                my_status[3] = my_status[3] *2;
-                my_status[4] = my_status[4] + my_exp;
-                
-                
+                my_status[2] = my_status[1] * 10;
+                my_status[3] = my_status[1] *2;
+                my_status[4] = gain_exp;
+              
             } else {
                 //레벨업을 안한 상태이다.
                 levelup = 0;
-                my_exp = my_exp + randint;         // 경험치만 추가된상태이다.       
+                my_exp = my_exp + gain_exp;         // 경험치만 추가된상태이다.       
                 my_status[4] = my_exp;
             }
 
@@ -178,6 +171,9 @@ int* battle_nomal_monster(int *my_status,int *potion,int c_tier)
 
             break;
         }
+
+        scanf("",&answer); //엔터를 쳐야 턴을 넘기는 기능?
+        getchar();
 
         turn++;
     }
@@ -206,8 +202,101 @@ int hit_hp(int hp, int ad)
     return health_point;
 }
 
-int* battle_boss_monster(int *my_status,int c_tier)
+int* battle_boss_monster(int *my_status,int *potion,int c_tier)
 {
+    int gain_exp,randint;
+    int turn=0;
+    char answer;
+    int levelup=0;   
+
+    
+    // 보스몬스터레벨= 층*2
+    int mon_lv =c_tier *2;
+    // 몬스터의 hp
+    int mon_hp = mon_lv*8;
+    //공격력
+    int mon_ad = mon_lv *1.5;      
+
+    int my_lv = my_status[1];
+    int my_hp = my_status[2];
+    int my_ad = my_status[3]; 
+    int my_exp = my_status[4]; 
+    srand((unsigned int)time(NULL));
+    printf("<<유저의 복켓몬 레벨은 %d이며 현재 hp는 %d 공격력은 %d 입니다.\n",my_lv, my_hp, my_ad);
+    printf("<<보스 몬스터 레벨은 %d이며 현재 hp는 %d 공격력은 %d 입니다.\n",mon_lv, mon_hp, mon_ad);
+    while(1)
+    {     
+        printf("[System!] %d 층의 %d 턴이 시작되었습니다..복켓몬의 렙은 %d 몬스터의 렙은 %d입니다.\n",c_tier, turn +1, my_lv, mon_lv); //추후 시스템 프린트 함수로 묶어서 출력        
+        // user의 hp가 0밑으로 떨어지거나 몬스터의 hp가 0으로 떨어지면 게임 종료
+        mon_hp = hit_hp(mon_hp, my_ad);
+        printf("[System!]유저의 복켓몬이 상대몬스터에게 %d만큼의 피해를 입혔습니다, 보스몬스터의 hp는 %d입니다..\n",my_ad,mon_hp); //추후 시스템 프린트 함수로 묶어서 출력
+        my_hp = hit_hp(my_hp, mon_ad);
+        printf("[System!]보스몬스터가 유저의 복켓몬에게 %d만큼의 피해를 입혔습니다, 복켓몬의 hp는 %d입니다.\n",mon_ad,my_hp);
+        printf("                                                                    계속하려면 Enter!\n");
+        
+        // 해당층에서 1번만 주어지는 혜택을 사용하겠는가?
+        if(potion[c_tier]==1)
+        {
+            //사용자 입력 받는곳 추후 potion의 배열에 1이 있으면 으로 조건문을 삽입 if (my_hp <=50%) &&(potion[c_tier] == 1) 
+            printf("복켓몬의 hp가 %d입니다. 회복을원하시면 (h)eal을 입력하세요 ) :\n",my_hp);
+            scanf("%c",&answer);
+            if(answer = 'h')
+            {
+                //복켓몬의 hp가 my_status[2]여기에 저장되어이 있던 수치 그대로 다시 조정
+                my_hp = my_status[2];
+                //그리고 potion[c_tier] = 0 으로 설정
+                potion[c_tier] = 0;
+            }
+        }
+
+        if(mon_hp<=0)
+        {
+            //유저가 이긴상황이다.
+            printf("유저의 복켓몬이 미약한 힘으로 %d 턴만에 상대 몬스터를 제압했습니다. 남은 hp는 %d이며 .\n",turn+1, my_hp);
+
+            // 30~50 렌덤하게 수치를 넣는다. 100이 넘어가면 레벨이 1씩증가하고 나머지를 exp에저장하는 구조가 좋을듯
+            gain_exp = (50 +rand() %70);
+            printf("[System!] 현재 경험치는 %d이며 획득 경험치는 %d입니다.\n",my_exp, gain_exp);
+
+            if((my_exp+gain_exp)>=100){           
+                levelup  = (my_exp+gain_exp) /100; // 레벨업 숫자
+                gain_exp = (my_exp+gain_exp) % 100; // 남은 exp    
+                printf("[System!] 축하합니다. Level up!"); 
+                //레벨업 했을때에만 수치의 변화가 생겨야한다. 그 외에는 변화가 있어선 안된다.
+                my_status[1] = my_status[1] + levelup;
+                my_status[2] = my_status[1] * 10;
+                my_status[3] = my_status[1] *2;
+                my_status[4] = gain_exp;
+              
+            } else {
+                //레벨업을 안한 상태이다.
+                levelup = 0;
+                my_exp = my_exp + gain_exp;         // 경험치만 추가된상태이다.       
+                my_status[4] = my_exp;
+            }
+
+
+            // my_status[0] 0은 나중에 구현하기로한 포켓몬 이름 혹은 고유번호 식별자 정도이다. 아직은 변경하지 않는다.
+            // my_status = update_status( *my_status,levelup,my_exp);
+            
+            
+            
+            // 게임을 이긴상태에서 내 스테이터스를 보내지 않았기 때문에 해당층에 머물든 2층을가든 내스탯에 쓰레기값이 잔뜩들어온다.
+            //마찬가지로 내스탯이 쓰레기면 몬스터 스텟도 쓰레기로 잔뜩 
+            return my_status;
+
+            break;
+        }else if(my_hp<=0)
+        {
+            // 사실 포션을 이용해서 부활시켜야할거같다. 아쉽
+            printf("유저 복켓몬이 상대 몬스터에게 %d턴만에 제압당하여 갖고있는 돈과 명예를 모두 잃었습니다 -game over 몬스터의 남은 체력 :%d",turn, mon_hp);
+            // 리셋후 게임재시작은 추후구현
+
+            break;
+        }
+
+        turn++;
+    }
     return my_status;
 }
  
@@ -224,11 +313,7 @@ int monster_appear(int *mystatus,int cnt_battle,int c_tier)
     if(cnt%5 ==0)
     {
         int *boss_status;
-        // 보스몬스터이다
-        boss_status[0]= 1;
-        boss_status[1]=c_tier*2;
-        boss_status[2]=boss_status[1]*5;
-        boss_status[3]=boss_status[1]*0.8;
+        // 보스몬스터이다       
 
         printf("보스 몬스터가 나타났습니다.");
         // printf("레벨은 %d이며 현재 hp는 %d입니다.\n ",boss_status[1],boss_status[2]);
