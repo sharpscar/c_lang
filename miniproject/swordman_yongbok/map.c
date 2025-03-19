@@ -4,6 +4,7 @@
 
 int main()
 {
+    // system("mode con:cols=90 lines=50");
     int map[size][size] = {0};
     int me[2] = {size - 1, size - 1}; // 9 9 내현재 좌표
     char input;
