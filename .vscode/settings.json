@@ -4,6 +4,12 @@
         "random": "c",
         "stdlib.h": "c",
         "stdbool.h": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "setting_all.h": "c",
+        "setting_all.C": "cpp",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
     }
 }
