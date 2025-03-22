@@ -12,6 +12,7 @@
         "initializer_list": "c",
         "utility": "c",
         "functional": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "typeinfo": "c"
     }
 }
