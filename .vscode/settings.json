@@ -10,6 +10,8 @@
         "array": "c",
         "string_view": "c",
         "initializer_list": "c",
-        "utility": "c"
+        "utility": "c",
+        "functional": "c",
+        "type_traits": "c"
     }
 }

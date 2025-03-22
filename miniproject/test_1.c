@@ -12,7 +12,9 @@ void draw_town();
 int main()
 {
     
-    draw_dungeon_1();
+    draw_town();
+
+    // draw_dungeon_1();
     // draw_dungeon_2();
     // draw_dungeon_3();
     // draw_dungeon_4();

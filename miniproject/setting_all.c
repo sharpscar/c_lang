@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <string.h> 
+#include <stdlib.h>
+#include <time.h>
+
+
+#define UNIQUE_SIZE 1000
 /**
  * 게임에 대한 모든 아이템과 몬스터들을 객체화? 구조체화 했다.
  * 
@@ -11,6 +16,30 @@
  * 호출되어 리턴된 값으로 기본검이 생성됩니다. 
  * 
  */
+
+// 랜덤 번호 생성
+int make_unique_number()
+{    
+    // int rotto[SIZE];
+    int r_number;
+    int flag;
+    int unique_number_list[UNIQUE_SIZE];
+
+    r_number = (rand()% UNIQUE_SIZE) +1; 
+
+    // 해당 하는 번호가 중복되었는지 체크
+
+    
+    for (int i=0; i<=sizeof(unique_number_list) ;i++)
+    {
+        if (r_number== unique_number_list[i])
+            return 0;
+    }
+    return 1;
+
+    return r_number;
+}
+
 
 
 struct sword  set_sword(struct sword p, char s_name[],int damage,int enforce, int attribute, int price, int mage_rate, int cri_rate);
