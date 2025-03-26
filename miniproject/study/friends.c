@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #define LEN 20
 
 struct names{
