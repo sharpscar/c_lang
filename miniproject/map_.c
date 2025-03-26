@@ -3,6 +3,11 @@
 #define SIZE 50
 
 void draw_dungeon_1();
+void draw_dungeon_2();
+void draw_dungeon_3();
+void draw_dungeon_4();
+void draw_dungeon_5();
+void draw_town();
 
 int main()
 {
@@ -230,14 +235,6 @@ void draw_dungeon_1()
             printf("\n");
         }
 
-<<<<<<< HEAD
-    return 0;
-}
-
-
-void draw_dungeon_1()
-{
-=======
         scanf("%c", &input);
         if((input == 'w') && (me[0] > 0))   // w를 입력받고 내 y좌표(반복문에서 i)가 0보다 클때
         {
@@ -729,6 +726,5 @@ void draw_dungeon_5()
         }
 
     }
->>>>>>> c2f0cbd42764d9ebd6935c4f2092d038a1072c78
     
 }
