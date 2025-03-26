@@ -2,6 +2,9 @@
 #include<stdlib.h>
 #define SIZE 50
 
+void draw_dungeon_1();
+
+
 int main()
 {
     int map[SIZE][SIZE] = {
@@ -109,7 +112,7 @@ int main()
         {
             me[1]--;
         }
-        else if((input == 'd') && (me[1] < 9))  // d를 입력받고 내 x좌표(반복문에서 j)가 9보다 클때
+        else if((input == 'd') && (me[1] < SIZE))  // d를 입력받고 내 x좌표(반복문에서 j)가 9보다 클때
         {
             me[1]++;
         }
@@ -119,4 +122,10 @@ int main()
 
 
     return 0;
+}
+
+
+void draw_dungeon_1()
+{
+    
 }
