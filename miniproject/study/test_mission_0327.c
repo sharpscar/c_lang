@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#define STR_SIZE 20
+#define STR_SIZE 50
 
 /**키보드 6.3만원
  * http://itempage3.auction.co.kr/DetailView.aspx?itemno=E851506355
@@ -9,13 +9,7 @@
  */
 
 
-typedef struct book
-{
-    char name[STR_SIZE];
-    char phone[STR_SIZE];
-    int ringtone;
-}PhoneBook;  //구조체 struct book 을 phoneBook이란 변수로 선언!
-
+ int get_input_1();
 /**
  * 김밥 0, 라면1, 덮밥2, 찌개3, 떡볶이 4, 튀김 5, 기타 6, 음료 7
  * 
@@ -27,21 +21,100 @@ typedef struct menu
     int price;
 }KimChoen;
 
-int main()
+typedef struct order
 {
+    int order_; //주문 순서까지 넣어주는 친절함!!
+    int category;
+    char name[100];
+    int price;
+}Order;
 
-    //구조체 배열등장!
-    PhoneBook pb[]=     
-    {
-        {"홍길동","010-1111-1111",1},
-        {"장보고","010-2222-2222",2},
-        {"김유신","010-3333-3333",3},
-        {"이순신","010-4444-4444",4},
-        {"유관순","010-5555-5555",5},
-        
-    };
+// Order orders[]={
+//     {
+//         {0,1, "",5000} ,
+//         {0,2, "",5000} ,
+//         {0,3, "",5000} ,
+//         {0,4, "",5000} 
 
+//     },
+// };
+
+int get_input_1()
+{
+    int answer_1;
+    printf("메뉴를 몇개 주문하시겠습니까 \n");
+    scanf("%d", &answer_1);
     
+    return answer_1;
+}
+
+
+// 최초 받은 수량 만큼 요청을 받아서 넣어야 한당!
+void get_input_2(KimChoen* menus, int len)
+{
+    // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
+    
+    char name[STR_SIZE];
+    int quentity;
+    struct order customer_order;
+    printf("주문할 메뉴를 입력하세요!! \n");
+    printf("음식이름 :");
+    scanf("%s", name);
+    getchar();
+    printf("몇개를 주문하시겠습니까?\n");
+    scanf("%d", &quentity);
+    getchar();
+    int index_ = 0;
+    // printf("%s 를 %d개 요청하셨습니다.\n", name, quentity);
+    //받은 주문을 특정 변수에 차곡차곡 저장하는 로직이 필요!
+    // printf("왜안되? %s", menus[0].name );
+    for (int i=0; i<len; i++)
+    {
+        // 일치하는 메뉴가 있으면
+        if(strcmp(name, menus[i].name)==0)
+        {
+            // printf("%s", menus[i].name);
+            // 오더스 구조체에 값을 넣는다.
+            // category카테고리! 메뉴name 몇개 quentity 를 리턴!
+            /**
+
+
+             */
+            customer_order =set_order(
+                customer_order,    
+                index_,            
+                menus[i].category, 
+                menus[i].name,      
+                menus[i].price      
+            );
+            index_++;
+           
+        }
+    }
+    
+
+}
+
+struct order set_order(
+    struct order co,
+    int order_, 
+    int category,
+     char name[],
+     int price )
+{
+    co.order_ = order_;
+    co.category = category;
+    strcpy(co.name ,name);
+    co.price = price;
+
+    return co;
+}
+
+
+
+int main()
+{  
+   
     KimChoen menus[]=
     {
         {0,"김밥",3000},
@@ -104,59 +177,67 @@ int main()
         
     };
 
+    int how_many_menu;
+    //사용자 입력을 받는 곳
+    how_many_menu= get_input_1();
 
-    //구조체의 포인터 변수 p를 생성한다. 현재 아무 주소도 
-    //가리키고 있지 않다.
-    // PhoneBook *p = NULL;
-    /*구조체 변수 pb[]에 대한 index 개수를 구한다. 5?*/
-    // int size = sizeof(pb)/ sizeof(pb[0]);
-    // assert(size != 5);
-    
-    //입력받을 이름을 저장할 변수
-    
-
-
-    /* pb 배열을 사이즈만큼반복하여 찾음 ! 
-     name 과 pb[i].name과 같으면 구조체의 포인터 변수 *p에 해당하는
-     pb[] index의 주소값을 저장!
-    */
-    // for (int i=0; i<size; ++i)
+    // typedef struct order
     // {
-    //     if(strcmp(name, pb[i].name)==0)
+    //     int order_; //주문 순서까지 넣어주는 친절함!!
+    //     int category;
+    //     char name[100];
+    //     int price;
+    // }Order;
+
+ 
+
+    
+
+    // for (int i=0; i<how_many_menu; i++)
+    // {
+    //     // customer_order[i] = {
+
+    //     // }
+    // }
+    
+
+    get_input_2(menus, 48);
+
+    Order customer_order[100];
+       // Order oders[]={
     //     {
-    //         p = &pb[i]; //해당 pb의 주소를 포인터 변수에 넣음!  해당하는게 있으면 어떤 액션을 취한다.! or 없으면 없다 출력!
-    //         break;
+    //         {0,1, "",5000} ,
+    //         {0,2, "",5000} ,
+    //         {0,3, "",5000} ,
+    //         {0,4, "",5000} 
+
+    //     },
+    // };
+
+    // 수량만큼 메뉴를 받고 받은 메뉴를 공간에 넣는다!
+
+    // 공간에 넣은걸 합산한다.
+
+    //할인을 적용한다.
+
+    // 계산을 완료한다. 
+
+
+
+    // 테스트 용도 아마 메뉴의 크기 만큼 뿌려보겠다. 이런 너낌!
+    // int menu_size = sizeof(menus)/ sizeof(menus[0]);
+    
+    // for (int i=0; i<menu_size; ++i)
+    // {
+        
+    //     // printf("%s\n", menus[i].name );
+    //     if(strcmp(name, menus[i].name)==0)
+    //     {
+    //         printf("메뉴명 %s %d\n",menus[i].name, menus[i].price );       //menus[i].name, menus[i].price
     //     }
     // }
 
-    // if(p == NULL)
-    // {
-    //     printf("입력한 이름의 정보가 없엉!");
-    // }else{
-    //     printf("%s의 연락처 :%s\n", p->name, p->phone);
-    // }
-
-    char name[STR_SIZE];
-
-    printf("검색할 이름을 입력하세요!! \n");
-    printf("이름 :");
-    scanf("%s", name);
-
-    int menu_size = sizeof(menus)/ sizeof(menus[0]);
     
-    for (int i=0; i<menu_size; ++i)
-    {
-        
-        // printf("%s\n", menus[i].name );
-        if(strcmp(name, menus[i].name)==0)
-        {
-            printf("메뉴명 %s %d\n",menus[i].name, menus[i].price );       //menus[i].name, menus[i].price
-        }
-        
-       
-        
-    }
-
 
     return 0;
 }
