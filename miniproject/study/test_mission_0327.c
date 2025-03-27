@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdbool.h>
+
+
+
 #define STR_SIZE 50
 
 /**키보드 6.3만원
@@ -180,19 +184,67 @@ int main()
     //사용자 입력을 받는 곳
     how_many_menu= get_input_1();
 
-    struct order myorder[50];
+    struct order myorder[1000];
     struct menu *ptr;
     ptr = &menus;
-    int total;
+    int total_cost, discount;
+    bool case1,case2,case3,case4,case5, case_kimra, case_dduktwi;
+    
+
+
+    // 주문을 받는 부분
     for (int i=0 ; i< how_many_menu; i++)
     {
         myorder[i]= get_input_2(ptr, 48);
-        printf("메인함수로 받아온 order 의 값%s",myorder[i].name);
-        total += myorder[i].total;
+    }
+    
+    // 할인을 계산하는 부분
+    for (int i=0; i< how_many_menu; i++)
+    {
+        case1 = (myorder[i].category == 1) && (myorder[i].quentity >= 1);
+        case2 = (myorder[i].category == 0) && (myorder[i].quentity >= 1);
+        case3 = (myorder[i].category == 4) && (myorder[i].quentity >= 1);
+        case4 = (myorder[i].category == 5) && (myorder[i].quentity >= 1);
+        //스페셜 조건 김라떡튀가 무조건 1개 이상 있는경우 2000원 할인
+        case5 = (myorder[i].category == 0) && (myorder[i].quentity >= 1) &&
+                (myorder[i].category == 1) && (myorder[i].quentity >= 1) &&
+                (myorder[i].category == 4) && (myorder[i].quentity >= 1) &&
+                (myorder[i].category == 5) && (myorder[i].quentity >= 1);
+        
+        total_cost += myorder[i].total;
+        
+        if(case5)
+        {   
+            discount = discount +2000;
+            //출력문 [스페셜 할인 2000원!]
+        }
+        else if( case1 && case2)
+        {
+            // case_kimra++;  // 이게 하나당 500씩 할인 
+            discount = discount +500;
+            //출력문 [할인 500원 추가]
+        }else if (case3 && case4)
+        {
+            discount = discount +500;
+            // 출력문 [할인 500원 추가]
+
+        }
+
+        printf ("총액은 %d 입니다.\n", total_cost);
+        printf ("할인액은 %d 입니다.\n", discount);
+
+        
+        printf ("지불하실 금액은 %d 입니다.\n", total_cost - discount);
+        
     }
 
-    //총합은 구했다.
-    printf("%d", total);
+    //총합은 구했다. 카테고리 {0,1} {4,5} {0,1,4,5}
+
+    /** 
+     * 카테고리가 0인, 카테고리가 1인 녀석들이 1개라도 있으면 
+     * 
+     */
+    printf("%d", total_cost);
 
     
     
