@@ -1,5 +1,3 @@
- if(strcmp(name,menus[i].name)==0)
-        {
-            // printf("%s\n", i);
-            printf("%s의 가격은 %s입니다.\n", menus[i].name, menus[i].price);
+
+            printf("[system]일치하는 메뉴가 없어요 입력하신 메뉴 ->%s", name);
         }
