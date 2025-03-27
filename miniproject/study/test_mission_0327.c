@@ -31,6 +31,7 @@ typedef struct order
     char name[100];
     int price;
     int quentity;
+    int total;
 };
 
 // Order orders[]={
@@ -56,7 +57,7 @@ void show_menus(struct menu *menus, int cnt)
  
     for(int i=0; i<cnt ; i++)
     {
-        printf("김천메뉴 %d)%s",i,menus[i].name);
+        printf("메뉴 %d)%s\t\t",i+1,menus[i].name);
     }
 }
 
@@ -74,27 +75,29 @@ struct order get_input_2(struct menu *menus, int len)
     getchar();
     printf("몇개를 주문하시겠습니까?\n");
     scanf("%d", &quentity);
-    getchar();
-    int index_ = 0;    
+    getchar();   
 
     for (int i=0; i<len; i++)
-    {
-        printf("strcmp함수가 뱉는 대답 !%s      %s\n", name, menus[i].name);
+    {        
         // 일치하는 메뉴가 있으면        
         if(strcmp(name, menus[i].name)==0)
         {        
             m.category = menus[i].category;
             strcpy(m.name ,menus[i].name);
             m.price = menus[i].price;
+            m.quentity = quentity;
+            m.total = m.price * m.quentity;
             // set_order(myorder, menus[i].category,menus[i].name, menus[i].price);
-            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});                        
-            index_++;
+            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});                                
+            return m;
            
-        }else{
-            printf("일치하는 메뉴가 없어요");
         }
-        return m;
+        // else{
+        //     printf("일치하는 메뉴가 없어요");
+        // }
+        
     }
+    return m;
 }
 // ORDER set_order(struct order co, int category,char name[],int price )
 // {     
@@ -177,65 +180,20 @@ int main()
     //사용자 입력을 받는 곳
     how_many_menu= get_input_1();
 
-    // typedef struct order
-    // {
-    //     int order_; //주문 순서까지 넣어주는 친절함!!
-    //     int category;
-    //     char name[100];
-    //     int price;
-    // }Order;
-
-    struct order myorder;
+    struct order myorder[50];
     struct menu *ptr;
     ptr = &menus;
-    myorder= get_input_2(ptr, 48);
+    int total;
+    for (int i=0 ; i< how_many_menu; i++)
+    {
+        myorder[i]= get_input_2(ptr, 48);
+        printf("메인함수로 받아온 order 의 값%s",myorder[i].name);
+        total += myorder[i].total;
+    }
 
-    // printf("%s", myorder->name);
-    // for (int i=0; i<how_many_menu; i++)
-    // {
-    //     // customer_order[i] = {
-
-    //     // }
-    // }
-    
-
-    
+    //총합은 구했다.
+    printf("%d", total);
 
     
-       // Order oders[]={
-    //     {
-    //         {0,1, "",5000} ,
-    //         {0,2, "",5000} ,
-    //         {0,3, "",5000} ,
-    //         {0,4, "",5000} 
-
-    //     },
-    // };
-
-    // 수량만큼 메뉴를 받고 받은 메뉴를 공간에 넣는다!
-
-    // 공간에 넣은걸 합산한다.
-
-    //할인을 적용한다.
-
-    // 계산을 완료한다. 
-
-
-
-    // 테스트 용도 아마 메뉴의 크기 만큼 뿌려보겠다. 이런 너낌!
-    // int menu_size = sizeof(menus)/ sizeof(menus[0]);
-    
-    // for (int i=0; i<menu_size; ++i)
-    // {
-        
-    //     // printf("%s\n", menus[i].name );
-    //     if(strcmp(name, menus[i].name)==0)
-    //     {
-    //         printf("메뉴명 %s %d\n",menus[i].name, menus[i].price );       //menus[i].name, menus[i].price
-    //     }
-    // }
-
-    
-
     
 }
