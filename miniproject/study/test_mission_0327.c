@@ -6,6 +6,9 @@
 /**키보드 6.3만원
  * http://itempage3.auction.co.kr/DetailView.aspx?itemno=E851506355
  * https://sweetnew.tistory.com/235
+ * 
+ * https://dojang.io/mod/page/view.php?id=571
+ * 
  */
 
 
@@ -19,19 +22,20 @@ typedef struct menu
     int category;  //0,1,2,3,4,5,6,7,8,9 
     char name[100];    
     int price;
-}KimChoen;
+};
 
 typedef struct order
 {
-    int order_; //주문 순서까지 넣어주는 친절함!!
+    // int order_; //주문 순서까지 넣어주는 친절함!!
     int category;
     char name[100];
     int price;
-}Order;
+    int quentity;
+};
 
 // Order orders[]={
 //     {
-//         {0,1, "",5000} ,
+//         {1, "",5000} ,
 //         {0,2, "",5000} ,
 //         {0,3, "",5000} ,
 //         {0,4, "",5000} 
@@ -47,75 +51,65 @@ int get_input_1()
     
     return answer_1;
 }
-
+void show_menus(struct menu *menus, int cnt)
+{
+ 
+    for(int i=0; i<cnt ; i++)
+    {
+        printf("김천메뉴 %d)%s",i,menus[i].name);
+    }
+}
 
 // 최초 받은 수량 만큼 요청을 받아서 넣어야 한당!
-void get_input_2(KimChoen* menus, int len)
+struct order get_input_2(struct menu *menus, int len)
 {
     // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
     
     char name[STR_SIZE];
     int quentity;
-    struct order customer_order;
+    struct order m;
     printf("주문할 메뉴를 입력하세요!! \n");
-    printf("음식이름 :");
+    printf("메뉴명 :");
     scanf("%s", name);
     getchar();
     printf("몇개를 주문하시겠습니까?\n");
     scanf("%d", &quentity);
     getchar();
-    int index_ = 0;
-    // printf("%s 를 %d개 요청하셨습니다.\n", name, quentity);
-    //받은 주문을 특정 변수에 차곡차곡 저장하는 로직이 필요!
-    // printf("왜안되? %s", menus[0].name );
+    int index_ = 0;    
+
     for (int i=0; i<len; i++)
     {
-        // 일치하는 메뉴가 있으면
+        printf("strcmp함수가 뱉는 대답 !%s      %s\n", name, menus[i].name);
+        // 일치하는 메뉴가 있으면        
         if(strcmp(name, menus[i].name)==0)
-        {
-            // printf("%s", menus[i].name);
-            // 오더스 구조체에 값을 넣는다.
-            // category카테고리! 메뉴name 몇개 quentity 를 리턴!
-            /**
-
-
-             */
-            customer_order =set_order(
-                customer_order,    
-                index_,            
-                menus[i].category, 
-                menus[i].name,      
-                menus[i].price      
-            );
+        {        
+            m.category = menus[i].category;
+            strcpy(m.name ,menus[i].name);
+            m.price = menus[i].price;
+            // set_order(myorder, menus[i].category,menus[i].name, menus[i].price);
+            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});                        
             index_++;
            
+        }else{
+            printf("일치하는 메뉴가 없어요");
         }
+        return m;
     }
+}
+// ORDER set_order(struct order co, int category,char name[],int price )
+// {     
+//     co.category = category;
+//     strcpy(co.name ,name);
+//     co.price = price;
     
-
-}
-
-struct order set_order(
-    struct order co,
-    int order_, 
-    int category,
-     char name[],
-     int price )
-{
-    co.order_ = order_;
-    co.category = category;
-    strcpy(co.name ,name);
-    co.price = price;
-
-    return co;
-}
+// }
 
 
 
 int main()
 {  
    
-    KimChoen menus[]=
+    struct menu menus[]=
     {
         {0,"김밥",3000},
         {0,"치즈김밥",3500},
@@ -177,6 +171,8 @@ int main()
         
     };
 
+    // 구조체 포인터를 이용해 메뉴를 출력한다.
+    show_menus(menus, 48);
     int how_many_menu;
     //사용자 입력을 받는 곳
     how_many_menu= get_input_1();
@@ -189,10 +185,12 @@ int main()
     //     int price;
     // }Order;
 
- 
+    struct order myorder;
+    struct menu *ptr;
+    ptr = &menus;
+    myorder= get_input_2(ptr, 48);
 
-    
-
+    // printf("%s", myorder->name);
     // for (int i=0; i<how_many_menu; i++)
     // {
     //     // customer_order[i] = {
@@ -201,9 +199,9 @@ int main()
     // }
     
 
-    get_input_2(menus, 48);
+    
 
-    Order customer_order[100];
+    
        // Order oders[]={
     //     {
     //         {0,1, "",5000} ,
@@ -239,5 +237,5 @@ int main()
 
     
 
-    return 0;
+    
 }
