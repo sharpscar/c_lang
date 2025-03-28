@@ -99,6 +99,7 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
                 o.category = menus[j].category;
                 strcpy(o.name, menus[j].name);
                 o.price = menus[j].price;
+                o.quentity= quentity;
                 os[i]= o;        
             }
         }        
@@ -109,7 +110,57 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
 
 int calcuate_discount(struct order *order_ptr,int how_many_menu)
 {
+
+    for(int i=0; i<how_many_menu; i++)
+    {
+        printf("하하하하하하 할인액을계싼!!%s  \n",order_ptr[i].name);
+        printf("하하하하하하 할인액을계싼!!%d  \n",order_ptr[i].quentity);
+    }
+    
    
+    int total_cost, discount;
+    bool case1,case2,case3,case4,case5, case_kimra, case_dduktwi;
+
+
+    // for (int i=0; i< how_many_menu; i++)
+    // {
+    //     case1 = (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1);
+    //     case2 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1);
+    //     case3 = (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1);
+    //     case4 = (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
+    //     //스페셜 조건 김라떡튀가 무조건 1개 이상 있는경우 2000원 할인
+    //     case5 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1) &&
+    //             (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1) &&
+    //             (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1) &&
+    //             (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
+        
+    //     total_cost += order_ptr[i].total;
+        
+    //     if(case5)
+    //     {   
+    //         discount = discount +2000;
+    //         //출력문 [스페셜 할인 2000원!]
+    //     }
+    //     else if( case1 && case2)
+    //     {
+    //         // case_kimra++;  // 이게 하나당 500씩 할인 
+    //         discount = discount +500;
+    //         //출력문 [할인 500원 추가]
+    //     }else if (case3 && case4)
+    //     {
+    //         discount = discount +500;
+    //         // 출력문 [할인 500원 추가]
+
+    //     }
+    // }
+
+    //     printf ("총액은 %d 입니다.\n", total_cost);
+    //     printf ("할인액은 %d 입니다.\n", discount);
+
+        
+    //     printf ("지불하실 금액은 %d 입니다.\n", total_cost - discount);
+
+    // return discount;
 }
 
 /*
@@ -228,57 +279,16 @@ int main()
      // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
     struct menu *menu_ptr;  
     struct order *kimbab_order;
-    menu_ptr = &menus;
-
+    menu_ptr = &menus;    
     
+    kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);    
     
-    kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);
-    
-    printf("주문정보1 %s\n",kimbab_order[0].name);
-    printf("주문정보1 %s\n",kimbab_order[1].name);
+    int result;
+    result = calcuate_discount(kimbab_order, how_many_menu);
 
-    //  // 메뉴정보를 넘겨서 사용자 입력을 받으면 그걸 메뉴와 유사한 주문 배열에 하나씩 받아옴
-  
+    printf("리절튼느???%d", result );
+    // case1_call_calcuate_discount_(kimbab_order);
 
-    // 받은 주문이 제대로 오더 객체에 담겨있는지 확인
-    // printf("2-1.주문받은게 맞는지 확인 %s\n",myorder[0].name);
-    // printf("2-1.주문받은게 맞는지 확인 %d\n",myorder[0].quentity);
-
-
-    // printf("2-2.주문받은게 맞는지 확인 %s\n",myorder[0].name);
-    // printf("2-2.주문받은게 맞는지 확인 %d\n",myorder[0].quentity);
-
-    struct order *order_ptr;
-    // order_ptr = &myorder;
-    //위에서 생성된 myorder객체를 할인율 계산 함수에 전달
-    // discount =  calcuate_discount(order_ptr,how_many_menu);
-    case1_call_calcuate_discount_();
-// 할인율 계산 함수는 discount 금액을 리턴
-
-    // 작성된 함수들의 기능 테스트를 assert() 구문으로 내가 예상한 금액과 비교 테스팅!
-
-    /**
-     *  1 orders의 메뉴 갯수가  5이상이면 음료수 1개 무료
-        2 orders의 메뉴의 갯수가 10이상이면 디스카운트 10%
-        3 카드 계산시 +10% 오버차지
-        4 포장은 포장비 2천원 , 메뉴가 5개 이상이면 무료
-
-        5 할인내역 -로 표현
-        6 정산하기  기능은 모든 주문들을 기록하는 내역이다. 
-        각행의 기능들을 동작하도록 함수화 하여 완성하는게 금요일 목표입니다.
-     */
-    
-    // 할인을 계산하는 부분
-    
-        
-    
-
-    //총합은 구했다. 카테고리 {0,1} {4,5} {0,1,4,5}
-
-    /** 
-     * 카테고리가 0인, 카테고리가 1인 녀석들이 1개라도 있으면 
-     * 
-     */
 }
    
     
