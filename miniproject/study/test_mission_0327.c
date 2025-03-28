@@ -104,6 +104,7 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
             }
         }        
     }
+    // free(os);
     return os;
 }
 
@@ -193,12 +194,10 @@ int calcuate_discount(struct order *order_ptr,int how_many_menu)
     } else if(kimra_temp >=1)
     {
         discount += kimra_temp *500;
-        printf("김라세트적용!");
+        // printf("김라세트적용!");
     } 
     
-    // 일단 할인이 전부 테스팅 된 이후엔 할인 내역서 라는 구조체를 만들어 구조체를 반환하자
-
-    
+    // 일단 할인이 전부 테스팅 된 이후엔 할인 내역서 라는 구조체를 만들어 구조체를 반환하자    
 
     // 김 라 떡 튀 카테고리별 함계를 정산한다.
 
@@ -208,33 +207,8 @@ int calcuate_discount(struct order *order_ptr,int how_many_menu)
 
     // 카드 계산이 있으면 +10% 할증
     
-   
-        
-    //     if(case5)
-    //     {   
-    //         discount = discount +2000;
-    //         //출력문 [스페셜 할인 2000원!]
-    //     }
-    //     else if( case1 && case2)
-    //     {
-    //         // case_kimra++;  // 이게 하나당 500씩 할인 
-    //         discount = discount +500;
-    //         //출력문 [할인 500원 추가]
-    //     }else if (case3 && case4)
-    //     {
-    //         discount = discount +500;
-    //         // 출력문 [할인 500원 추가]
 
-    //     }
-    // }
-
-    //     printf ("총액은 %d 입니다.\n", total_cost);
-    //     printf ("할인액은 %d 입니다.\n", discount);
-
-        
-    //     printf ("지불하실 금액은 %d 입니다.\n", total_cost - discount);
-
-    // return discount;
+    return discount;
 }
 
 /*
@@ -245,30 +219,242 @@ order배열과 주문메뉴갯수를 매개변수로 넣으면 할인계산하�
 void case1_call_calcuate_discount_()
 {
     // 김밥 2개 라면1개를 orders 주문에 넣어서 테스팅을 해본다.
-    struct order orders[2];
+    // struct order orders[2];
+    struct order *os = malloc(sizeof(struct order));
+
     struct order m1, m2;
 
-    m1.category = 0;
+    m1.category = KIMBOB;
     strcpy(m1.name ,"김밥");
     m1.price = 3000;
     m1.quentity = 2;
-    m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    os[0] = m1;
 
-    m2.category = 1;
+    m2.category = RAMEN;
     strcpy(m2.name ,"라면");
     m2.price = 3000;
     m2.quentity = 1;
-    m2.total = m2.price * m2.quentity; //여기까지가 라면
-    orders[1] = m2;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    os[1] = m2;
 
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
-    // myorder = &orders;
-    // int discount = calcuate_discount(myorder,2);
+    myorder = &os;
+    int discount = calcuate_discount(myorder,2);
     // assert(500==discount);
-    // printf("계산된 할인액은 ?%d", discount);
+
+    printf("계산된 할인액은 ?%d\n", discount);
 
 }
+void case3_call_calcuate_discount_()
+{
+    // 김밥 1개참치김밥1 라면2개를 orders 주문에 넣어서 테스팅을 해본다.
+    // struct order *os = malloc(sizeof(struct order));
+    struct order orders[100];
+    struct order m1, m2,m3;
+
+    m1.category = KIMBOB;
+    strcpy(m1.name ,"김밥");
+    m1.price = 3000;
+    m1.quentity = 1;
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    orders[0] = m1;
+
+    m2.category = KIMBOB;
+    strcpy(m2.name ,"참치김밥");
+    m2.price = 3000;
+    m2.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[1] = m2;
+
+    m3.category = RAMEN;
+    strcpy(m3.name ,"라면");
+    m3.price = 3000;
+    m3.quentity = 2;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[2] = m3;
+
+    // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
+    struct order *myorder;
+    myorder = &orders;
+    int discount = calcuate_discount(myorder,3);
+    // assert(discount==1000);
+
+    printf("계산된 할인액은 ?%d\n", discount);
+
+    
+}
+
+void case4_call_calcuate_discount_()
+{
+    // 김밥 1개참치김밥1 라면2개를 orders 주문에 넣어서 테스팅을 해본다.
+    // struct order *os = malloc(sizeof(struct order));
+    struct order orders[100];
+    struct order m1, m2,m3;
+
+    m1.category = KIMBOB;
+    strcpy(m1.name ,"참치김밥");
+    m1.price = 3000;
+    m1.quentity = 1;
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    orders[0] = m1;
+
+    m2.category = RAMEN;
+    strcpy(m2.name ,"짬뽕라면");
+    m2.price = 3000;
+    m2.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[1] = m2;
+
+    // m3.category = RAMEN;
+    // strcpy(m3.name ,"라면");
+    // m3.price = 3000;
+    // m3.quentity = 2;
+    // // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    // orders[2] = m3;
+
+    // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
+    struct order *myorder;
+    myorder = &orders;
+    int discount = calcuate_discount(myorder,2);
+    // assert(discount==500);
+    //
+    printf("계산된 할인액은 ?%d\n", discount);
+
+    
+}
+
+void case5_call_calcuate_discount_()
+{
+    // 김밥 1개참치김밥1 라면2개를 orders 주문에 넣어서 테스팅을 해본다.
+    // struct order *os = malloc(sizeof(struct order));
+    struct order orders[100];
+    struct order m1, m2,m3;
+
+    m1.category = TWIGIM;
+    strcpy(m1.name ,"고추튀김");
+    m1.price = 3000;
+    m1.quentity = 1;
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    orders[0] = m1;
+
+    m2.category = DDUKBOK;
+    strcpy(m2.name ,"떡볶이");
+    m2.price = 3000;
+    m2.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[1] = m2;
+
+    // m3.category = RAMEN;
+    // strcpy(m3.name ,"라면");
+    // m3.price = 3000;
+    // m3.quentity = 2;
+    // // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    // orders[2] = m3;
+
+    // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
+    struct order *myorder;
+    myorder = &orders;
+    int discount = calcuate_discount(myorder,2);
+    // assert(discount==500);
+    //
+    printf("계산된 할인액은 ?%d\n", discount);
+
+    
+}
+void case6_call_calcuate_discount_()
+{
+    // 김밥 1개참치김밥1 라면2개를 orders 주문에 넣어서 테스팅을 해본다.
+    // struct order *os = malloc(sizeof(struct order));
+    struct order orders[100];
+    struct order m1, m2,m3;
+
+    m1.category = TWIGIM;
+    strcpy(m1.name ,"김말이튀김");
+    m1.price = 3000;
+    m1.quentity = 2;
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    orders[0] = m1;
+
+    m2.category = DDUKBOK;
+    strcpy(m2.name ,"떡볶이");
+    m2.price = 3000;
+    m2.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[1] = m2;
+
+    // m3.category = RAMEN;
+    // strcpy(m3.name ,"라면");
+    // m3.price = 3000;
+    // m3.quentity = 2;
+    // // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    // orders[2] = m3;
+
+    // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
+    struct order *myorder;
+    myorder = &orders;
+    int discount = calcuate_discount(myorder,2);
+    // assert(discount==500);
+    //
+    printf("계산된 할인액은 ?%d\n", discount);
+
+    
+}
+
+void case7_call_calcuate_discount_()
+{
+    // 스페셜세트4개를 orders 주문에 넣어서 테스팅을 해본다.
+    // struct order *os = malloc(sizeof(struct order));
+    struct order orders[100];
+    struct order m1, m2,m3,m4;
+
+    m1.category = TWIGIM;
+    strcpy(m1.name ,"김말이튀김");
+    m1.price = 3000;
+    m1.quentity = 1;
+    // m1.total = m1.price * m1.quentity; //여기까지가 김밥
+    orders[0] = m1;
+
+    m2.category = DDUKBOK;
+    strcpy(m2.name ,"떡볶이");
+    m2.price = 3000;
+    m2.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[1] = m2;
+
+    m3.category = KIMBOB;
+    strcpy(m3.name ,"김밥");
+    m3.price = 3000;
+    m3.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[2] = m3;
+
+    m4.category = RAMEN;
+    strcpy(m4.name ,"라면");
+    m4.price = 3000;
+    m4.quentity = 1;
+    // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    orders[3] = m4;
+
+    // m3.category = RAMEN;
+    // strcpy(m3.name ,"라면");
+    // m3.price = 3000;
+    // m3.quentity = 2;
+    // // m2.total = m2.price * m2.quentity; //여기까지가 라면
+    // orders[2] = m3;
+
+    // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
+    struct order *myorder;
+    myorder = &orders;
+    int discount = calcuate_discount(myorder,4);
+    // assert(discount==500);
+    //
+    printf("계산된 할인액은 ?%d\n", discount);
+
+    
+}
+
 
 
 int main()
@@ -345,10 +531,6 @@ int main()
     how_many_menu= get_input_1();
     //여기에 포장? 매장? 질문하여 변수에 넣자
     
-    
-    
-    
-    
     int discount;
      // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
     struct menu *menu_ptr;  
@@ -359,9 +541,17 @@ int main()
     
     int result;
     result = calcuate_discount(kimbab_order, how_many_menu);
-
-    printf("리절튼느???%d", result );
+     
+    // printf("메인함수에서의 할인 결과 %d\n", result );
     // case1_call_calcuate_discount_(kimbab_order);
+    // case3_call_calcuate_discount_();
+    // 테스트케이스1
+    // case1_call_calcuate_discount_();
+
+    // case4_call_calcuate_discount_();
+    // case5_call_calcuate_discount_();
+    // case7_call_calcuate_discount_();
+    
 
 }
    
