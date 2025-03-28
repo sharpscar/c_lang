@@ -56,15 +56,34 @@ void show_menus(struct menu *menus, int cnt)
     }
 }
 
+
+ // printf("주문할 메뉴를 입력하세요!! \n");
+    // printf("메뉴명 :\n");
+    // scanf("%s", name);
+    // getchar();
+    // printf("몇개를 주문하시겠습니까?\n");
+    // scanf("%d", &quentity);
+    // getchar();   
+    // if(strcmp(name, menus[i].name)==0)
+
 // 최초 받은 수량 만큼 요청을 받아서 넣어야 한당!
 struct order get_input_2(struct menu *menus, int len)
 {
-    // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
+   
+    int answer_1;
     
+    printf("메뉴명 기준 몇개 주문하시겠습니까 \n");
+    scanf("%d", &answer_1);
+
+    
+
+    // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
+
     char name[STR_SIZE];
     int quentity;
     struct order m;
     printf("주문할 메뉴를 입력하세요!! \n");
+    printf("메뉴명 :");
     printf("메뉴명 :\n");
     scanf("%s", name);
     getchar();
@@ -86,12 +105,15 @@ struct order get_input_2(struct menu *menus, int len)
             // 구조체 데이터 넣는 아래의 방식도 동작하는거같다.
             // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});                                
             return m;
-           
+
         }
+        // else{
+        //     printf("일치하는 메뉴가 없어요");
+        // }
         else{
             printf("[system]일치하는 메뉴가 없어요 입력하신 메뉴 ->%s", name);
         }
-        
+
     }
     return m;
 }
@@ -254,12 +276,12 @@ int main()
     int discount;
      // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
      struct menu *menu_ptr;
-     menu_ptr = &menus;
+      ;
 
      // 메뉴정보를 넘겨서 사용자 입력을 받으면 그걸 메뉴와 유사한 주문 배열에 하나씩 받아옴
     for (int i=0 ; i< how_many_menu; i++)
     {
-        myorder[i]= get_input_2(menu_ptr, 48);
+        myorder[i]= get_input_2(&menus, 48);
     }
     struct order *order_ptr;
     // order_ptr = &myorder;
