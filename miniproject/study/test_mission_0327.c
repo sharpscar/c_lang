@@ -110,31 +110,105 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
 
 int calcuate_discount(struct order *order_ptr,int how_many_menu)
 {
-
+    // enum {KIMBOB,RAMEN,DUPBOB,JJIGAE,DDUKBOK,TWIGIM,DRINKS,GUITAR};
+    //           0,    1,    2,    3,    4,      5,      6,     7
+    int kate_0=0, kate_1=0,kate_2=0,kate_3=0,kate_4=0,kate_5=0,kate_6=0,kate_7=0;
+    int sp_temp=0, kimra_temp=0, dduk_temp=0,discount=0;
     for(int i=0; i<how_many_menu; i++)
     {
-        printf("하하하하하하 할인액을계싼!!%s  \n",order_ptr[i].name);
-        printf("하하하하하하 할인액을계싼!!%d  \n",order_ptr[i].quentity);
+        switch (order_ptr[i].category)
+        {
+        case 0:
+            kate_0 +=order_ptr[i].quentity;
+            break;
+        case 1:
+            kate_1 +=order_ptr[i].quentity;
+            break;
+        case 2:
+            kate_2 +=order_ptr[i].quentity;
+            break;
+        case 3:
+            kate_3 +=order_ptr[i].quentity;
+            break;
+        case 4:
+            kate_4 +=order_ptr[i].quentity;
+            break;
+        case 5:
+            kate_5 +=order_ptr[i].quentity;
+            break;
+        case 6:
+            kate_6 +=order_ptr[i].quentity;
+            break;
+        case 7:
+            kate_7 +=order_ptr[i].quentity;
+            break;        
+
+        default:
+            break;
+        }
+        // 카테고리를 기준으로 메뉴의 갯수를 가져온다.  김라셋,   떡튀셋, 스페셜셋 크게 이렇게 나뉜다.
     }
+
+    if (((kate_0 > 0)&& (kate_1 > 0))&&((kate_4 > 0)&& (kate_5 > 0)))
+    {
+        while(((kate_0 > 0)&& (kate_1 > 0))&&((kate_4 > 0)&& (kate_5 >0)))
+        {
+            kate_0--;
+            kate_1--;
+            kate_4--;
+            kate_5--;
+            sp_temp++;
+        }
+    }
+
+    if ((kate_0 > 0)&& (kate_1 > 0))
+    {
+        while((kate_0 > 0)&& (kate_1 > 0))
+        {
+            kate_0--;
+            kate_1--;            
+            kimra_temp++;
+        }
+    }
+
+    if ((kate_4 > 0)&& (kate_5 > 0))
+    {
+        while((kate_4 > 0)&& (kate_5 > 0))
+        {
+            kate_4--;
+            kate_5--;            
+            dduk_temp++;
+        }
+    }
+
+    if(sp_temp >=1)
+    {
+        discount += sp_temp *2000;
+        printf("스페셜세트적용!");
+    }
+    else if(dduk_temp >=1)
+    {
+        discount += dduk_temp *1000;
+        printf("떡튀세트적용!");
+    } else if(kimra_temp >=1)
+    {
+        discount += kimra_temp *500;
+        printf("김라세트적용!");
+    } 
+    
+    // 일단 할인이 전부 테스팅 된 이후엔 할인 내역서 라는 구조체를 만들어 구조체를 반환하자
+
+    
+
+    // 김 라 떡 튀 카테고리별 함계를 정산한다.
+
+    // 주문이 10개 이상이면 -10% 할인
+
+    // 주문이 5개 이상이면 음료수 무료 출력
+
+    // 카드 계산이 있으면 +10% 할증
     
    
-    int total_cost, discount;
-    bool case1,case2,case3,case4,case5, case_kimra, case_dduktwi;
-
-
-    // for (int i=0; i< how_many_menu; i++)
-    // {
-    //     case1 = (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1);
-    //     case2 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1);
-    //     case3 = (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1);
-    //     case4 = (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
-    //     //스페셜 조건 김라떡튀가 무조건 1개 이상 있는경우 2000원 할인
-    //     case5 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1) &&
-    //             (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1) &&
-    //             (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1) &&
-    //             (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
-        
-    //     total_cost += order_ptr[i].total;
         
     //     if(case5)
     //     {   
