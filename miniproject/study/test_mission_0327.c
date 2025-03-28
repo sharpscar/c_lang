@@ -29,6 +29,12 @@ struct menu
     int price;
 };
 
+struct receip
+{
+    int total;
+    char discount[100]; // 디스카운트 내역
+    int discount_;
+};
 
 
 struct order
@@ -55,11 +61,21 @@ int get_input_1()
 
 int get_input_3()
 {
+    int is_package;
     //포장인지 매장인지 //    
+    printf("포장하실건가요? 포장은 1, 매장은 2");
+    scanf("%d", &is_package);
+    return is_package;
 }
 int get_input_4()
 {
     //현금인지 카드인지
+    int is_cash;
+    //포장인지 매장인지 //    
+    
+    printf("카드결제인가요 ? 카드결제는 1, 현금결제는 2"); 
+    scanf("%d", &is_cash);
+    return is_cash;
 }
 
 
@@ -109,14 +125,13 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
 }
 
 
-int calcuate_discount(struct order *order_ptr,int how_many_menu)
+struct recicp*  calcuate_discount(struct order *order_ptr,int how_many_menu,int is_package,int is_cash)
 {
-    // enum {KIMBOB,RAMEN,DUPBOB,JJIGAE,DDUKBOK,TWIGIM,DRINKS,GUITAR};
-    //           0,    1,    2,    3,    4,      5,      6,     7
+   
     int kate_0=0, kate_1=0,kate_2=0,kate_3=0,kate_4=0,kate_5=0,kate_6=0,kate_7=0;
-    int sp_temp=0, kimra_temp=0, dduk_temp=0,discount=0;
+    int sp_temp=0, kimra_temp=0, dduk_temp=0,discount=0, total_money=0, total_count = 0;
     for(int i=0; i<how_many_menu; i++)
-    {
+    {   
         switch (order_ptr[i].category)
         {
         case 0:
@@ -148,6 +163,10 @@ int calcuate_discount(struct order *order_ptr,int how_many_menu)
             break;
         }
         // 카테고리를 기준으로 메뉴의 갯수를 가져온다.  김라셋,   떡튀셋, 스페셜셋 크게 이렇게 나뉜다.
+
+        order_ptr[i].total = order_ptr[i].quentity* order_ptr[i].price;
+        total_money =total_money + order_ptr[i].total;
+        total_count += order_ptr[i].quentity;
     }
 
     if (((kate_0 > 0)&& (kate_1 > 0))&&((kate_4 > 0)&& (kate_5 > 0)))
@@ -182,10 +201,15 @@ int calcuate_discount(struct order *order_ptr,int how_many_menu)
         }
     }
 
+    struct receip r;
+    struct receip *pr;  // 영수증 구조체를 리턴해보자!
+   
+
     if(sp_temp >=1)
     {
         discount += sp_temp *2000;
-        printf("스페셜세트적용!");
+        printf("스페셜세트적용!");        
+        
     }
     else if(dduk_temp >=1)
     {
@@ -194,21 +218,77 @@ int calcuate_discount(struct order *order_ptr,int how_many_menu)
     } else if(kimra_temp >=1)
     {
         discount += kimra_temp *500;
-        // printf("김라세트적용!");
+        printf("김라세트적용!");
     } 
     
     // 일단 할인이 전부 테스팅 된 이후엔 할인 내역서 라는 구조체를 만들어 구조체를 반환하자    
 
-    // 김 라 떡 튀 카테고리별 함계를 정산한다.
+    // struct receip
+    // {
+    //     int total;
+    //     char discount[100]; // 디스카운트 내역
+    //     int discount_;
+    // };
+    printf("총 비용은 %d 할인금액은 %d 입니다.\n", total_money,discount);
 
     // 주문이 10개 이상이면 -10% 할인
 
     // 주문이 5개 이상이면 음료수 무료 출력
 
     // 카드 계산이 있으면 +10% 할증
-    
 
-    return discount;
+
+
+
+    if(is_package==1)
+    {
+        char s1[500] = "[포장]\n"; 
+        total_money = total_money +2000;
+        if(is_cash ==1)
+        {
+            char s3[50] = "[카드]\n";
+            strcat(s1, s3);
+            total_money = total_money + (total_money *10) /100;
+        }
+        if(total_count <=5)
+        {
+            char s4[50]= "[음료무료]\n";
+        }
+        if(total_count <=10)
+        {
+            char s5[50]="메뉴10개이상 10%%할인";
+            total_money = total_money - (total_money *10) /100;
+        }
+    }else{
+        char s1[50] = "";
+      
+
+        if(sp_temp >=1)
+        {
+            
+            char s2[50] = "-스페셜세트";
+            strcat(s1,s2);
+            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
+            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});            
+            return pr;
+
+        }
+        else if(dduk_temp >=1)
+        {
+            char s2[50] = "-떡튀세트";
+            strcat(s1,s2);
+            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
+            return pr;
+            
+        } else if(kimra_temp >=1)
+        {
+            char s2[50] = "-떡튀세트";
+            strcat(s1,s2);
+            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
+            return pr;
+        } 
+    }
+    return pr;
 }
 
 /*
@@ -241,7 +321,7 @@ void case1_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &os;
-    int discount = calcuate_discount(myorder,2);
+    int discount = calcuate_discount(myorder,2,1,1);
     // assert(500==discount);
 
     printf("계산된 할인액은 ?%d\n", discount);
@@ -278,7 +358,7 @@ void case3_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,3);
+    int discount = calcuate_discount(myorder,3,1,2);
     // assert(discount==1000);
 
     printf("계산된 할인액은 ?%d\n", discount);
@@ -317,7 +397,7 @@ void case4_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2);
+    int discount = calcuate_discount(myorder,2,2,1);
     // assert(discount==500);
     //
     printf("계산된 할인액은 ?%d\n", discount);
@@ -356,7 +436,7 @@ void case5_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2);
+    int discount = calcuate_discount(myorder,2,2,2);
     // assert(discount==500);
     //
     printf("계산된 할인액은 ?%d\n", discount);
@@ -394,7 +474,7 @@ void case6_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2);
+    int discount = calcuate_discount(myorder,2,2,1);
     // assert(discount==500);
     //
     printf("계산된 할인액은 ?%d\n", discount);
@@ -447,7 +527,7 @@ void case7_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,4);
+    int discount = calcuate_discount(myorder,4,2,2);
     // assert(discount==500);
     //
     printf("계산된 할인액은 ?%d\n", discount);
@@ -526,6 +606,11 @@ int main()
     printf("\n");
     printf("\n");
 
+    int is_cash, is_package;
+    is_package = get_input_3(); // 1은 포장 2는 매장
+
+    is_cash = get_input_4();  // 1은 카드 2는 현금
+
     int how_many_menu;
     //사용자 입력을 받는 곳
     how_many_menu= get_input_1();
@@ -539,8 +624,10 @@ int main()
     
     kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);    
     
-    int result;
-    result = calcuate_discount(kimbab_order, how_many_menu);
+    struct receip r;
+    struct receip* pr;
+    pr = &r;
+    pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
      
     // printf("메인함수에서의 할인 결과 %d\n", result );
     // case1_call_calcuate_discount_(kimbab_order);
