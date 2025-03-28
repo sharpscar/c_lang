@@ -205,89 +205,63 @@ struct recicp*  calcuate_discount(struct order *order_ptr,int how_many_menu,int 
     struct receip *pr;  // 영수증 구조체를 리턴해보자!
     pr = &r;
 
+   
+    // printf("총 비용은 %d 할인금액은 %d 입니다.\n", total_money,discount);   
+    if(is_package==1)
+    {   
+        printf("-포장비용 2000원 추가입니다.\n");
+        // char s1[500] = "[포장]\n"; 
+        total_money = total_money +2000;
+    }       
+    if(is_cash ==1)
+    {
+        printf("-현금결제입니다..\n");
+        // char s3[50] = "[카드]\n";        
+        
+    }
+    if(total_count >=5)
+    {
+        printf("-메뉴 5개이상 음료무료 \n");
+        // char s4[50]= "[음료무료]\n";
+    }
+    if(total_count >=10)
+    {
+        printf("-메뉴 10개이상 음료무료 \n");
+        // char s5[50]="메뉴10개이상 10%%할인";
+        total_money = total_money - (total_money *10) /100;
+    }
+    
+    // char s1[50] = "";
+      
+
     if(sp_temp >=1)
     {
+
         discount += sp_temp *2000;
-        printf("스페셜세트적용!");        
         
+        // strcat(s1,s2);
+        pr = (&(struct receip){.discount ="-스페셜세트", .total=total_money-discount, .discount_ = discount});
+        // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});            
+        return pr;
+
     }
     else if(dduk_temp >=1)
     {
+        // char s2[50] = "-떡튀세트";
         discount += dduk_temp *1000;
-        printf("떡튀세트적용!");
+        
+        pr = (&(struct receip){.discount ="-떡튀세트", .total=total_money-discount, .discount_ = discount});
+        return pr;
+        
     } else if(kimra_temp >=1)
     {
+        // char s2[50] = "-떡튀세트";
         discount += kimra_temp *500;
-        printf("김라세트적용!");
+        
+        pr = (&(struct receip){.discount ="-김라세트", .total=total_money-discount, .discount_ = discount});
+        return pr;
     } 
     
-    // 일단 할인이 전부 테스팅 된 이후엔 할인 내역서 라는 구조체를 만들어 구조체를 반환하자    
-
-    // struct receip
-    // {
-    //     int total;
-    //     char discount[100]; // 디스카운트 내역
-    //     int discount_;
-    // };
-    printf("총 비용은 %d 할인금액은 %d 입니다.\n", total_money,discount);
-
-    // 주문이 10개 이상이면 -10% 할인
-
-    // 주문이 5개 이상이면 음료수 무료 출력
-
-    // 카드 계산이 있으면 +10% 할증
-
-
-
-
-    if(is_package==1)
-    {
-        char s1[500] = "[포장]\n"; 
-        total_money = total_money +2000;
-        if(is_cash ==1)
-        {
-            char s3[50] = "[카드]\n";
-            strcat(s1, s3);
-            total_money = total_money + (total_money *10) /100;
-        }
-        if(total_count <=5)
-        {
-            char s4[50]= "[음료무료]\n";
-        }
-        if(total_count <=10)
-        {
-            char s5[50]="메뉴10개이상 10%%할인";
-            total_money = total_money - (total_money *10) /100;
-        }
-    }else{
-        char s1[50] = "";
-      
-
-        if(sp_temp >=1)
-        {
-            
-            char s2[50] = "-스페셜세트";
-            strcat(s1,s2);
-            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
-            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});            
-            return pr;
-
-        }
-        else if(dduk_temp >=1)
-        {
-            char s2[50] = "-떡튀세트";
-            strcat(s1,s2);
-            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
-            return pr;
-            
-        } else if(kimra_temp >=1)
-        {
-            char s2[50] = "-떡튀세트";
-            strcat(s1,s2);
-            pr = (&(struct receip){.discount =s1, .total=total_money, .discount_ = discount});
-            return pr;
-        } 
-    }
     return pr;
 }
 
