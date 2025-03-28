@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
+enum {KIMBOB,RAMEN,DUPBOB,JJIGAE,DDUKBOK,TWIGIM,DRINKS,GUITAR};
 
 
 #define STR_SIZE 50
@@ -15,20 +16,22 @@
  * 
  */
 
-
+ 
  int get_input_1();
 /**
  * 김밥 0, 라면1, 덮밥2, 찌개3, 떡볶이 4, 튀김 5, 기타 6, 음료 7
  * 
  */
-typedef struct menu
+struct menu
 {
     int category;  //0,1,2,3,4,5,6,7,8,9 
     char name[100];    
     int price;
 };
 
-typedef struct order
+
+
+struct order
 {
     // int order_; //주문 순서까지 넣어주는 친절함!!
     int category;
@@ -44,9 +47,22 @@ int get_input_1()
     int answer_1;
     printf("메뉴명 기준 몇개 주문하시겠습니까 \n");
     scanf("%d", &answer_1);
+
+
     
     return answer_1;
 }
+
+int get_input_3()
+{
+    //포장인지 매장인지 //    
+}
+int get_input_4()
+{
+    //현금인지 카드인지
+}
+
+
 void show_menus(struct menu *menus, int cnt)
 {
  
@@ -56,92 +72,44 @@ void show_menus(struct menu *menus, int cnt)
     }
 }
 
-// 최초 받은 수량 만큼 요청을 받아서 넣어야 한당!
-struct order get_input_2(struct menu *menus, int len)
+// 메뉴판 , 메뉴판의 메뉴 갯수,  주문숫자
+struct orders *get_input_2(struct menu *menus, int len,int cnt)
 {
-    // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
-    
-    char name[STR_SIZE];
+    char menu_name[100];
     int quentity;
-    struct order m;
-    printf("주문할 메뉴를 입력하세요!! \n");
-    printf("메뉴명 :\n");
-    scanf("%s", name);
-    getchar();
-    printf("몇개를 주문하시겠습니까?\n");
-    scanf("%d", &quentity);
-    getchar();   
-
-    for (int i=0; i<len; i++)
-    {        
-        // 일치하는 메뉴가 있으면        
-        if(strcmp(name, menus[i].name)==0)
-        {        
-            m.category = menus[i].category;
-            strcpy(m.name ,menus[i].name);
-            m.price = menus[i].price;
-            m.quentity = quentity;
-            m.total = m.price * m.quentity;
-            // set_order(myorder, menus[i].category,menus[i].name, menus[i].price);
-            // 구조체 데이터 넣는 아래의 방식도 동작하는거같다.
-            // myorder = (&(struct order){.category=menus[i].category, .name=menus[i].name, .price =menus[i].price, .quentity=quentity});                                
-            return m;
-           
-        }
-        else{
-            printf("[system]일치하는 메뉴가 없어요 입력하신 메뉴 ->%s", name);
-        }
+  
+    struct order o;
+    // struct order os[100]; //메뉴를 하번에 몇개 주문할지모르니까 일단 100개
+    struct order *os = malloc(sizeof(struct order));
+    //메뉴들 검색하는 함수호출 - quentity만큼 반복 해당하는게 있으면 메뉴를 담자
+    for(int i=0; i<cnt; i++)
+    {
         
+        // int menu_size = 48;//  sizeof(menus)/ sizeof(menus[0]);
+        printf("메뉴명은 어떻게 되십니까? \n");
+        scanf("%s", menu_name);
+        printf("수량은 몇개를 주문하시겠습니까? \n");
+        scanf("%d", &quentity);
+        //메뉴명은 문자열이라 포인터인 매개변수로 넘김
+        // len = 48개의 메뉴에서 찾는다.
+        for(int j=0; j<len; j++)
+        {
+            if(strcmp(menu_name, menus[j].name)==0)
+            {
+                o.category = menus[j].category;
+                strcpy(o.name, menus[j].name);
+                o.price = menus[j].price;
+                os[i]= o;        
+            }
+        }        
     }
-    return m;
+    return os;
 }
+
 
 int calcuate_discount(struct order *order_ptr,int how_many_menu)
 {
    
-    int total_cost, discount;
-    bool case1,case2,case3,case4,case5, case_kimra, case_dduktwi;
-
-
-    for (int i=0; i< how_many_menu; i++)
-    {
-        case1 = (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1);
-        case2 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1);
-        case3 = (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1);
-        case4 = (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
-        //스페셜 조건 김라떡튀가 무조건 1개 이상 있는경우 2000원 할인
-        case5 = (order_ptr[i].category == 0) && (order_ptr[i].quentity >= 1) &&
-                (order_ptr[i].category == 1) && (order_ptr[i].quentity >= 1) &&
-                (order_ptr[i].category == 4) && (order_ptr[i].quentity >= 1) &&
-                (order_ptr[i].category == 5) && (order_ptr[i].quentity >= 1);
-        
-        total_cost += order_ptr[i].total;
-        
-        if(case5)
-        {   
-            discount = discount +2000;
-            //출력문 [스페셜 할인 2000원!]
-        }
-        else if( case1 && case2)
-        {
-            // case_kimra++;  // 이게 하나당 500씩 할인 
-            discount = discount +500;
-            //출력문 [할인 500원 추가]
-        }else if (case3 && case4)
-        {
-            discount = discount +500;
-            // 출력문 [할인 500원 추가]
-
-        }
-    }
-
-        printf ("총액은 %d 입니다.\n", total_cost);
-        printf ("할인액은 %d 입니다.\n", discount);
-
-        
-        printf ("지불하실 금액은 %d 입니다.\n", total_cost - discount);
-
-    return discount;
 }
 
 /*
@@ -170,97 +138,116 @@ void case1_call_calcuate_discount_()
 
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
-    myorder = &orders;
-    int discount = calcuate_discount(myorder,2);
-    assert(500==discount);
-    printf("계산된 할인액은 ?%d", discount);
+    // myorder = &orders;
+    // int discount = calcuate_discount(myorder,2);
+    // assert(500==discount);
+    // printf("계산된 할인액은 ?%d", discount);
 
 }
 
 
 int main()
 {
+
     struct menu menus[]=
     {
-        {0,"김밥",3000},
-        {0,"치즈김밥",3500},
-        {0,"참치김밥",3500},
-        {0,"김치김밥",3500},
-        {0,"야채김밥",3000},
-        {0,"소고기김밥",4000},
-        {0,"돈까스김밥",4000},
-        {0,"삼겹살김밥",4500},
+        {KIMBOB,"김밥",3000},
+        {KIMBOB,"치즈김밥",3500},
+        {KIMBOB,"참치김밥",3500},
+        {KIMBOB,"김치김밥",3500},
+        {KIMBOB,"야채김밥",3000},
+        {KIMBOB,"소고기김밥",4000},
+        {KIMBOB,"돈까스김밥",4000},
+        {KIMBOB,"삼겹살김밥",4500},
 
-        {1,"라면",3000},
-        {1,"계란라면",3500},
-        {1,"치즈라면",3500},
-        {1,"만두라면",3500},
-        {1,"짬뽕라면",4000},
-        {1,"떡라면",3500},
-        {1,"떡만두라면",4000},
+        {RAMEN,"라면",3000},
+        {RAMEN,"계란라면",3500},
+        {RAMEN,"치즈라면",3500},
+        {RAMEN,"만두라면",3500},
+        {RAMEN,"짬뽕라면",4000},
+        {RAMEN,"떡라면",3500},
+        {RAMEN,"떡만두라면",4000},
 
-        {2,"제육덮밥",7000},
-        {2,"오징어덮밥",7500},
-        {2,"오징어제육덮밥",8000},
-        {2,"돈까스덮밥",8000},
-        {2,"쇠고기덮밥",8000},
-        {2,"김치덮밥",7000},
-        {2,"김치제육덮밥",7500},
-        {2,"소시지덮밥",7500},
-        {2,"오므라이스",7500},
+        {DUPBOB,"제육덮밥",7000},
+        {DUPBOB,"오징어덮밥",7500},
+        {DUPBOB,"오징어제육덮밥",8000},
+        {DUPBOB,"돈까스덮밥",8000},
+        {DUPBOB,"쇠고기덮밥",8000},
+        {DUPBOB,"김치덮밥",7000},
+        {DUPBOB,"김치제육덮밥",7500},
+        {DUPBOB,"소시지덮밥",7500},
+        {DUPBOB,"오므라이스",7500},
         
-        {3,"김치찌개",7000},
-        {3,"된장찌개",7000},
-        {3,"참치김치찌개",7500},
-        {3,"고기듬뿍 김치찌개",8000},
-        {3,"차돌된장찌개",8000},
-        {3,"부대찌개",8000},
-        {3,"동태찌개",8000},
-        {3,"순두부찌개",8000},
+        {JJIGAE,"김치찌개",7000},
+        {JJIGAE,"된장찌개",7000},
+        {JJIGAE,"참치김치찌개",7500},
+        {JJIGAE,"고기듬뿍 김치찌개",8000},
+        {JJIGAE,"차돌된장찌개",8000},
+        {JJIGAE,"부대찌개",8000},
+        {JJIGAE,"동태찌개",8000},
+        {JJIGAE,"순두부찌개",8000},
         
+        {DDUKBOK,"떡볶이",5000},
+        {DDUKBOK,"치즈떡볶이",6000},
+        {DDUKBOK,"해물떡볶이",7000},
+        {DDUKBOK,"짜장떡볶이",7000},
+        {DDUKBOK,"라볶이",6000},
+        {DDUKBOK,"치즈라볶이",7000},
 
-        {4,"떡볶이",5000},
-        {4,"치즈떡볶이",6000},
-        {4,"해물떡볶이",7000},
-        {4,"짜장떡볶이",7000},
-        {4,"라볶이",6000},
-        {4,"치즈라볶이",7000},
+        {TWIGIM,"김말이튀김",4000},
+        {TWIGIM,"야채튀김",4000},
+        {TWIGIM,"만두튀김",4000},
+        {TWIGIM,"고추튀김",5000},
+        {TWIGIM,"오징어튀김",5000},
 
-        {5,"김말이튀김",4000},
-        {5,"야채튀김",4000},
-        {5,"만두튀김",4000},
-        {5,"고추튀김",5000},
-        {5,"오징어튀김",5000},
+        {GUITAR,"공기밥",1000},
 
-        {6,"공기밥",1000},
-
-
-        {7,"콜라",1000},
-        {7,"사이다",1000},
-        {7,"오렌지환타",1000},
-        {7,"파인애플환타",1000},
+        {DRINKS,"콜라",1000},
+        {DRINKS,"사이다",1000},
+        {DRINKS,"오렌지환타",1000},
+        {DRINKS,"파인애플환타",1000},
         
     };
 
     // 구조체 포인터를 이용해 메뉴를 출력한다.
     show_menus(menus, 48);
+  
+    printf("\n");
+    printf("\n");
 
     int how_many_menu;
     //사용자 입력을 받는 곳
     how_many_menu= get_input_1();
     //여기에 포장? 매장? 질문하여 변수에 넣자
-
-    struct order myorder[1000];
+    
+    
+    
+    
+    
     int discount;
      // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
-     struct menu *menu_ptr;
-     menu_ptr = &menus;
+    struct menu *menu_ptr;  
+    struct order *kimbab_order;
+    menu_ptr = &menus;
 
-     // 메뉴정보를 넘겨서 사용자 입력을 받으면 그걸 메뉴와 유사한 주문 배열에 하나씩 받아옴
-    for (int i=0 ; i< how_many_menu; i++)
-    {
-        myorder[i]= get_input_2(menu_ptr, 48);
-    }
+    
+    
+    kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);
+    
+    printf("주문정보1 %s\n",kimbab_order[0].name);
+    printf("주문정보1 %s\n",kimbab_order[1].name);
+
+    //  // 메뉴정보를 넘겨서 사용자 입력을 받으면 그걸 메뉴와 유사한 주문 배열에 하나씩 받아옴
+  
+
+    // 받은 주문이 제대로 오더 객체에 담겨있는지 확인
+    // printf("2-1.주문받은게 맞는지 확인 %s\n",myorder[0].name);
+    // printf("2-1.주문받은게 맞는지 확인 %d\n",myorder[0].quentity);
+
+
+    // printf("2-2.주문받은게 맞는지 확인 %s\n",myorder[0].name);
+    // printf("2-2.주문받은게 맞는지 확인 %d\n",myorder[0].quentity);
+
     struct order *order_ptr;
     // order_ptr = &myorder;
     //위에서 생성된 myorder객체를 할인율 계산 함수에 전달
