@@ -63,7 +63,7 @@ int get_input_3()
 {
     int is_package;
     //포장인지 매장인지 //    
-    printf("포장하실건가요? 포장은 1, 매장은 2");
+    printf("포장하실건가요? 포장은 1, 매장은 2) ");
     scanf("%d", &is_package);
     return is_package;
 }
@@ -73,7 +73,7 @@ int get_input_4()
     int is_cash;
     //포장인지 매장인지 //    
     
-    printf("카드결제인가요 ? 카드결제는 1, 현금결제는 2"); 
+    printf("카드결제인가요 ? 카드결제는 1, 현금결제는 2) "); 
     scanf("%d", &is_cash);
     return is_cash;
 }
@@ -203,7 +203,7 @@ struct recicp*  calcuate_discount(struct order *order_ptr,int how_many_menu,int 
 
     struct receip r;
     struct receip *pr;  // 영수증 구조체를 리턴해보자!
-   
+    pr = &r;
 
     if(sp_temp >=1)
     {
@@ -628,6 +628,25 @@ int main()
     struct receip* pr;
     pr = &r;
     pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
+
+
+    //영수증 출력
+    /**
+     * 
+    struct receip
+    {
+        int total;
+        char discount[100]; // 디스카운트 내역
+        int discount_;
+    };
+
+     * 
+     */
+
+    printf("할인적용된 내용은 %s\n",pr->discount);
+    printf("할인액은 %d원 입니다.\n", pr->discount_);
+    printf("총 비용은 %d원 입니다.\n", pr->total);
+
      
     // printf("메인함수에서의 할인 결과 %d\n", result );
     // case1_call_calcuate_discount_(kimbab_order);
