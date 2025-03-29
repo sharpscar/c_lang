@@ -84,8 +84,12 @@ void show_menus(struct menu *menus, int cnt)
  
     for(int i=0; i<cnt ; i++)
     {
-        printf("메뉴 %d)%s\t\t",i+1,menus[i].name);
+        printf("메뉴명 %d)%s\t",i+1,menus[i].name);
+        printf("가격 : %d\t\t",menus[i].price);
+
     }
+    printf("\n");
+    printf("===========================================================================================================================================================================================================");
 }
 
 // 메뉴판 , 메뉴판의 메뉴 갯수,  주문숫자
@@ -116,6 +120,7 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
                 strcpy(o.name, menus[j].name);
                 o.price = menus[j].price;
                 o.quentity= quentity;
+                o.total = o.price * o.quentity;
                 os[i]= o;        
             }
         }        
@@ -511,6 +516,29 @@ void case7_call_calcuate_discount_()
     
 }
 
+void show_selected_orders(struct order *kimbab_order, int how_many_menu)
+{
+    
+    int total=0;
+    for(int i=0; i<how_many_menu; i++)
+    {
+        printf("%d번째 주문 메뉴명 %s 가격 %d 합계 %d\n",i+1,kimbab_order[i].name,kimbab_order[i].price,kimbab_order[i].total);
+        printf("---------------------------------------------------------------------------------\n");
+    }
+
+}
+
+int get_input_5()
+{
+    int answer;
+    printf("위 메뉴대로 주문 진행할까요? y/n\n");
+    scanf("%d", &answer);
+    if(answer='y')
+        return 1;
+    else
+        return 0;
+    
+}
 
 
 int main()
@@ -576,41 +604,62 @@ int main()
         
     };
 
-    // 구조체 포인터를 이용해 메뉴를 출력한다.
-    show_menus(menus, 48);
-  
-    printf("\n");
-    printf("\n");
-
-    int is_cash, is_package;
-    is_package = get_input_3(); // 1은 포장 2는 매장
-
-    is_cash = get_input_4();  // 1은 카드 2는 현금
-
-    int how_many_menu;
-    //사용자 입력을 받는 곳
-    how_many_menu= get_input_1();
-    //여기에 포장? 매장? 질문하여 변수에 넣자
+    while(1)
+    {
+        // 구조체 포인터를 이용해 메뉴를 출력한다.
+        show_menus(menus, 48);
     
-    int discount;
-     // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
-    struct menu *menu_ptr;  
-    struct order *kimbab_order;
-    menu_ptr = &menus;    
-    
-    kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);    
-    
-    struct receip r;
-    struct receip* pr;
-    pr = &r;
-    pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
+        
+        printf("\n");
 
+        
+       
+        int is_cash, is_package;
+        is_package = get_input_3(); // 1은 포장 2는 매장
 
-    
+        is_cash = get_input_4();  // 1은 카드 2는 현금
 
-    printf("할인적용된 내용은 %s\n",pr->discount);
-    printf("할인액은 %d원 입니다.\n", pr->discount_);
-    printf("총 비용은 %d원 입니다.\n", pr->total);
+        int how_many_menu;
+        //사용자 입력을 받는 곳
+        how_many_menu= get_input_1();
+        //여기에 포장? 매장? 질문하여 변수에 넣자
+        
+        int discount;
+        int order_answer;
+        // 구조체로 만든 메뉴정보들을 포인터 변수로 만듬
+        struct menu *menu_ptr;  
+        struct order *kimbab_order;
+        menu_ptr = &menus;    
+        
+        kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);    
+
+        // 선택한 메뉴들을 보여준다. if(유저 입력이 y이면 계산진행 n이면 kim kimbab_order초기화후 showmenus부터 재진입 )
+
+        //KIMBAB_ORDER는  구조체의 배열 포인터입니다. 그걸 크기만큼 반복하여 뿌려줘보도록하세요~(띠용!)
+
+        show_selected_orders(kimbab_order, how_many_menu);
+
+        order_answer =  get_input_5();
+        if(order_answer=1)
+        {            
+            struct receip r;
+            struct receip* pr;
+            pr = &r;
+            pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
+
+            printf("할인적용된 내용은 %s\n",pr->discount);
+            printf("할인액은 %d원 입니다.\n", pr->discount_);
+            printf("총 비용은 %d원 입니다.\n", pr->total);
+
+            memset(&kimbab_order,0, sizeof(struct order));
+            free(kimbab_order);
+        }else{
+            // kimbab_order 를 초기화한다.
+            memset(&kimbab_order,0, sizeof(struct order));
+            free(kimbab_order); //이게 먹히는지는 모르겠으나 으..
+
+        }
+    }
 
      
    
