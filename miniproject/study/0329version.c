@@ -204,7 +204,7 @@ struct recicp*  calcuate_discount(struct order *order_ptr,int how_many_menu,int 
     struct receip r;
     struct receip *pr;  // 영수증 구조체를 리턴해보자!
     pr = &r;
-    
+
    
     // printf("총 비용은 %d 할인금액은 %d 입니다.\n", total_money,discount);   
     if(is_package==1)
@@ -606,33 +606,14 @@ int main()
     pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
 
 
-    //영수증 출력
-    /**
-     * 
-    struct receip
-    {
-        int total;
-        char discount[100]; // 디스카운트 내역
-        int discount_;
-    };
-
-     * 
-     */
+    
 
     printf("할인적용된 내용은 %s\n",pr->discount);
     printf("할인액은 %d원 입니다.\n", pr->discount_);
     printf("총 비용은 %d원 입니다.\n", pr->total);
 
      
-    // printf("메인함수에서의 할인 결과 %d\n", result );
-    // case1_call_calcuate_discount_(kimbab_order);
-    // case3_call_calcuate_discount_();
-    // 테스트케이스1
-    // case1_call_calcuate_discount_();
-
-    // case4_call_calcuate_discount_();
-    // case5_call_calcuate_discount_();
-    // case7_call_calcuate_discount_();
+   
     
 
 }
