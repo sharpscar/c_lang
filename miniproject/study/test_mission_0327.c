@@ -99,8 +99,8 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
     int quentity;
   
     struct order o;
-    // struct order os[100]; //메뉴를 하번에 몇개 주문할지모르니까 일단 100개
-    struct order *os = malloc(sizeof(struct order));
+    // struct order os[100]; 
+    struct order *os = malloc(sizeof(struct order)*100); // 자꾸  malloc corrupted top size 예외가 발생하여 일단 100만큼만 크게잡았다.
     //메뉴들 검색하는 함수호출 - quentity만큼 반복 해당하는게 있으면 메뉴를 담자
     for(int i=0; i<cnt; i++)
     {
@@ -522,7 +522,7 @@ void show_selected_orders(struct order *kimbab_order, int how_many_menu)
     int total=0;
     for(int i=0; i<how_many_menu; i++)
     {
-        printf("%d번째 주문 메뉴명 %s 가격 %d 합계 %d\n",i+1,kimbab_order[i].name,kimbab_order[i].price,kimbab_order[i].total);
+        printf("%d번째 주문 메뉴명 %s 가격 %d 수량 %d 합계 %d\n",i+1,kimbab_order[i].name,kimbab_order[i].price,kimbab_order[i].quentity,kimbab_order[i].total);
         printf("---------------------------------------------------------------------------------\n");
     }
 
@@ -531,12 +531,14 @@ void show_selected_orders(struct order *kimbab_order, int how_many_menu)
 int get_input_5()
 {
     int answer;
-    printf("위 메뉴대로 주문 진행할까요? y/n\n");
+    printf("위 메뉴대로 주문 진행할까요? 진행은 1 취소는 2");
     scanf("%d", &answer);
-    if(answer='y')
-        return 1;
-    else
-        return 0;
+    getchar();
+    
+    
+
+    return answer;
+        
     
 }
 
@@ -606,6 +608,8 @@ int main()
 
     while(1)
     {
+        
+        getchar();
         // 구조체 포인터를 이용해 메뉴를 출력한다.
         show_menus(menus, 48);
     
@@ -639,8 +643,11 @@ int main()
 
         show_selected_orders(kimbab_order, how_many_menu);
 
-        order_answer =  get_input_5();
-        if(order_answer=1)
+        order_answer =  get_input_5(); //사용자입력을 받는 부분 check;
+
+        printf("디버기기기기기기깅 %d", order_answer);
+
+        if(order_answer==1)
         {            
             struct receip r;
             struct receip* pr;
