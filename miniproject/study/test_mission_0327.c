@@ -39,7 +39,8 @@ struct receip
 
 struct order
 {
-    // int order_; //주문 순서까지 넣어주는 친절함!!
+    
+    int order_index; //정산을 위한 인덱스
     int category;
     char name[100];
     int price;
@@ -85,7 +86,7 @@ void show_menus(struct menu *menus, int cnt)
     for(int i=0; i<cnt ; i++)
     {
         printf("메뉴명 %d)%s\t",i+1,menus[i].name);
-        printf("가격 : %d\t\t",menus[i].price);
+        printf("가격 : %d\t\t\n",menus[i].price);
 
     }
     printf("\n");
@@ -93,7 +94,7 @@ void show_menus(struct menu *menus, int cnt)
 }
 
 // 메뉴판 , 메뉴판의 메뉴 갯수,  주문숫자
-struct orders *get_input_2(struct menu *menus, int len,int cnt)
+struct orders *get_input_2(struct menu *menus, int len,int cnt, int order_index)
 {
     char menu_name[100];
     int quentity;
@@ -116,17 +117,45 @@ struct orders *get_input_2(struct menu *menus, int len,int cnt)
         {
             if(strcmp(menu_name, menus[j].name)==0)
             {
+                o.order_index = order_index;
                 o.category = menus[j].category;
                 strcpy(o.name, menus[j].name);
                 o.price = menus[j].price;
                 o.quentity= quentity;
-                o.total = o.price * o.quentity;
+                o.total = o.price * o.quentity;                
                 os[i]= o;        
             }
         }        
     }
     // free(os);
     return os;
+}
+
+
+void show_selected_orders(struct order *kimbab_order, int how_many_menu)
+{
+    
+    int total=0;
+    for(int i=0; i<how_many_menu; i++)
+    {
+        printf("%d번째 주문 메뉴명 %s 가격 %d 수량 %d 합계 %d\n",i+1,kimbab_order[i].name,kimbab_order[i].price,kimbab_order[i].quentity,kimbab_order[i].total);
+        printf("---------------------------------------------------------------------------------\n");
+    }
+
+}
+
+int get_input_5()
+{
+    int answer;
+    printf("위 메뉴대로 주문 진행할까요? 진행은 1 취소는 2 정산은 3\n");
+    scanf("%d", &answer);
+    getchar();
+    
+    
+
+    return answer;
+        
+    
 }
 
 
@@ -231,7 +260,7 @@ struct recicp*  calcuate_discount(struct order *order_ptr,int how_many_menu,int 
     }
     if(total_count >=10)
     {
-        printf("-메뉴 10개이상 음료무료 \n");
+        printf("-메뉴 10개이상 10%%할인  \n");
         // char s5[50]="메뉴10개이상 10%%할인";
         total_money = total_money - (total_money *10) /100;
     }
@@ -516,32 +545,6 @@ void case7_call_calcuate_discount_()
     
 }
 
-void show_selected_orders(struct order *kimbab_order, int how_many_menu)
-{
-    
-    int total=0;
-    for(int i=0; i<how_many_menu; i++)
-    {
-        printf("%d번째 주문 메뉴명 %s 가격 %d 수량 %d 합계 %d\n",i+1,kimbab_order[i].name,kimbab_order[i].price,kimbab_order[i].quentity,kimbab_order[i].total);
-        printf("---------------------------------------------------------------------------------\n");
-    }
-
-}
-
-int get_input_5()
-{
-    int answer;
-    printf("위 메뉴대로 주문 진행할까요? 진행은 1 취소는 2");
-    scanf("%d", &answer);
-    getchar();
-    
-    
-
-    return answer;
-        
-    
-}
-
 
 int main()
 {
@@ -605,6 +608,8 @@ int main()
         {DRINKS,"파인애플환타",1000},
         
     };
+    int order_index=0; // 주문의 인덱스를 위한변수
+    struct receip daily_receip[500];  // 일별정산을 위한 배열
 
     while(1)
     {
@@ -627,6 +632,8 @@ int main()
         //사용자 입력을 받는 곳
         how_many_menu= get_input_1();
         //여기에 포장? 매장? 질문하여 변수에 넣자
+
+        
         
         int discount;
         int order_answer;
@@ -635,7 +642,7 @@ int main()
         struct order *kimbab_order;
         menu_ptr = &menus;    
         
-        kimbab_order = get_input_2(menu_ptr, 48, how_many_menu);    
+        kimbab_order = get_input_2(menu_ptr, 48, how_many_menu, order_index);    
 
         // 선택한 메뉴들을 보여준다. if(유저 입력이 y이면 계산진행 n이면 kim kimbab_order초기화후 showmenus부터 재진입 )
 
@@ -645,12 +652,12 @@ int main()
 
         order_answer =  get_input_5(); //사용자입력을 받는 부분 check;
 
-        printf("디버기기기기기기깅 %d", order_answer);
+        
 
         if(order_answer==1)
         {            
             struct receip r;
-            struct receip* pr;
+            struct receip* pr; //포인터+ 영수증 이란뜻 pr 으 변수명 약혐!
             pr = &r;
             pr = calcuate_discount(kimbab_order, how_many_menu,  is_package, is_cash);
 
@@ -658,14 +665,38 @@ int main()
             printf("할인액은 %d원 입니다.\n", pr->discount_);
             printf("총 비용은 %d원 입니다.\n", pr->total);
 
+            
+            daily_receip[order_index] = *pr;  //오더 순서대로 정산에 추가
+
             memset(&kimbab_order,0, sizeof(struct order));
             free(kimbab_order);
-        }else{
+
+
+        }else if(order_answer==2){
             // kimbab_order 를 초기화한다.
             memset(&kimbab_order,0, sizeof(struct order));
             free(kimbab_order); //이게 먹히는지는 모르겠으나 으..
 
+
+            //정산및 종료하기
+        }else if(order_answer==3){
+            int daily_total;
+
+            for (int i=0; i<order_index; i++)
+            {
+
+                daily_total += daily_receip[i].total;    
+                
+            }
+            
+            printf("금일 총 오더는 %d개 입니다.\n", order_index+1);
+            printf("금일 총 매출액은 %d 입니다.\n", daily_total);
+            
+
+
+            return ;
         }
+        order_index++;
     }
 
      
