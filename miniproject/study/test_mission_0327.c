@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
@@ -302,10 +303,10 @@ void case1_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &os;
-    int discount = calcuate_discount(myorder,2,1,1);
+    // int discount = calcuate_discount(myorder,2,1,1);
     // assert(500==discount);
 
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
 }
 void case3_call_calcuate_discount_()
@@ -339,10 +340,10 @@ void case3_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,3,1,2);
+    // int discount = calcuate_discount(myorder,3,1,2);
     // assert(discount==1000);
 
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
     
 }
@@ -378,10 +379,10 @@ void case4_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2,2,1);
+    // int discount = calcuate_discount(myorder,2,2,1);
     // assert(discount==500);
     //
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
     
 }
@@ -417,10 +418,10 @@ void case5_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2,2,2);
+    // int discount = calcuate_discount(myorder,2,2,2);
     // assert(discount==500);
     //
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
     
 }
@@ -455,10 +456,10 @@ void case6_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,2,2,1);
+    // int discount = calcuate_discount(myorder,2,2,1);
     // assert(discount==500);
     //
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
     
 }
@@ -508,10 +509,10 @@ void case7_call_calcuate_discount_()
     // 생성한 오더배열을 calcuate_discount함수에 전달하면 어떻게 반응하는지 테스트 가능하다.
     struct order *myorder;
     myorder = &orders;
-    int discount = calcuate_discount(myorder,4,2,2);
+    // int discount = calcuate_discount(myorder,4,2,2);
     // assert(discount==500);
     //
-    printf("계산된 할인액은 ?%d\n", discount);
+    // printf("계산된 할인액은 ?%d\n", discount);
 
     
 }
@@ -613,8 +614,7 @@ int main()
         // 구조체 포인터를 이용해 메뉴를 출력한다.
         show_menus(menus, 48);
     
-        
-        printf("\n");
+  
 
         
        
@@ -645,7 +645,6 @@ int main()
 
         order_answer =  get_input_5(); //사용자입력을 받는 부분 check;
 
-        printf("디버기기기기기기깅 %d", order_answer);
 
         if(order_answer==1)
         {            
