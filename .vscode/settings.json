@@ -14,6 +14,10 @@
         "functional": "c",
         "type_traits": "c",
         "typeinfo": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "string.h": "c",
+        "socket.h": "c",
+        "unistd.h": "c",
+        "inet.h": "c"
     }
 }
