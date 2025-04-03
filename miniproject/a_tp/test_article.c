@@ -9,7 +9,7 @@ int write_a_article();
 
 int main()
 {  
-    show_article_list();
+    // show_article_list();
 
     return 0;
 }
