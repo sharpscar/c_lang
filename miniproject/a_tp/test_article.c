@@ -21,10 +21,14 @@ void write_a_article();
 
 int main()
 {  
+
     write_a_article();
+
+    
 
     return 0;
 }
+
 void write_a_article()
 {
     FILE *file = fopen("./article.csv","a");
@@ -55,6 +59,7 @@ void write_a_article()
     /** 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간  <<-- 입력을 받아서 글등록하도록 변경 예정 */  
     // fprintf(file, "16,돼지고기를 먹는방법, 언제든먹을수 있지, %s, ,%d, \n", user_id, seconds);  
     fprintf(file ,"%d, %s,%s,%s,%d", a.article_id,a.article_title, a.article_content,a.user_id,a.wrtie_time );
+    
     fclose(file);
 }
 
