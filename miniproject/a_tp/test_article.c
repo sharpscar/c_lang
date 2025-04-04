@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include "struct_member.h"
+#define MAX_MEMBERS 100
+
+
 
 // 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간 글
 struct article {
@@ -11,11 +15,21 @@ struct article {
     char reciever_id[50];
     int wrtie_time;
 };
+typedef enum
+{
+    OK,
+    NO_MEMBER
+}AccountError;
 
+// 회원csv 파일 -> 구조체 new_mem 파일에 담는 함수
+void csv_to_struct_mem();
 
+//글작성을 위해 글제목, 글내용 입력 받는 함수
 struct article get_input();
 
+// 글목록을 출력하는 함수
 void show_article_list();
+
 
 void write_a_article();
 
@@ -24,12 +38,19 @@ void store_to_article_struct();
 
 void delete_a_article_from_articles();
 struct article articles[300]; 
+member new_mem[100];
 
 int articles_cnt;
+int account_cnt;
+
+// 회원 아이디로 검색!
+member retrieve_id_from_member();
+
 
 int main()
 {  
-    // delete_a_article_from_articles(7); 7번글이 삭제!
+   
+
     return 0;
 }
 void delete_a_article_from_articles(int del_index)
@@ -65,6 +86,47 @@ void delete_a_article_from_articles(int del_index)
     fclose(file);
 }
 
+// 매개변수로 유저 id를 받아야 합니다.
+member retrieve_id_from_member()
+{
+     
+    
+    csv_to_struct_mem();
+
+    //매개변수를 넣을곳!
+    char finding_id[50]="qwer6";  //김알콜씨
+
+    member already_joined;
+    for(int i=0; i<account_cnt; i++)
+    {
+        
+        // 찾아요
+        if(strcmp(finding_id, new_mem[i].id)==0)
+        {
+            //있다!
+            strcpy(already_joined.id,new_mem[i].id);
+            strcpy(already_joined.password,new_mem[i].password);
+            strcpy(already_joined.name, new_mem[i].name);
+            strcpy(already_joined.phone_num, new_mem[i].phone_num);
+            already_joined.age=new_mem[i].age;
+           
+
+        }else{
+            
+            /* 만약 enum에 정의한 오류를 리턴하도록 하면 이 함수의 리턴방식은 int로 단순해진다.  */ 
+            //없는경우 뭘 리턴해야할까유?
+            // return NO_MEMBER;  
+        }
+
+
+    }
+    
+    // printf("가져온내용 %s", new_mem[4].id);
+    printf("가져온내용 %s", already_joined.name);
+
+    return already_joined;
+
+}
 
 void store_to_article_struct()
 {
@@ -153,7 +215,7 @@ void store_to_article_struct()
            }
             token = strtok(NULL, ","); //다음 필드로 이동
             field_count++;
-            //타이틀만 나오게 하려면 어떻게 해야할까?            
+                        
         }
         row_count++;
         printf("\n");
@@ -189,7 +251,7 @@ void write_a_article()
 
     char user_id[50] = "박경태01";
     // char sender_id[3]= " ";  //없으면 공백으로 쓰자
-    char sender_id =" ";
+    char receiver_id[50] =" ";
     time_t seconds;
     time(&seconds);
 
@@ -199,13 +261,20 @@ void write_a_article()
     // strcpy(a.article_title, "돼지고기를 먹는방법");
     // strcpy(a.article_content, "언제든먹을수 있지");
     strcpy(a.writer_id, user_id);
+    strcpy(a.reciever_id, receiver_id);
     a.wrtie_time = seconds;
 
    
     /** 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간  <<-- 입력을 받아서 글등록하도록 변경 예정 */  
     // fprintf(file, "16,돼지고기를 먹는방법, 언제든먹을수 있지, %s, ,%d, \n", user_id, seconds);  
     fprintf(file ,"%d, %s,%s,%s,%s,%d\n",
-         a.article_id,a.article_title, a.article_content,a.writer_id,sender_id,a.wrtie_time );
+         a.article_id,
+         a.article_title,
+         a.article_content,
+         a.writer_id,
+         receiver_id,
+         a.wrtie_time 
+        );
 
     fclose(file);
 }
@@ -277,4 +346,43 @@ void show_article_list()
     fclose(file);
     
 
+}
+
+
+void csv_to_struct_mem() {  // 멤버 csv 내부 텍스트 메인함수 구조체로 가져오는 함수
+    FILE *file = fopen("account.csv","r");
+    char line[255];
+    account_cnt = 0;
+
+    while(fgets(line, sizeof(line),file) != NULL && account_cnt < MAX_MEMBERS){
+        // line[strcpn(line,"\n")] = 0;  //줄바꿈 문자 0으로 바꿔줌
+        char *token = strtok(line,",");  //,기준으로 나누어 가져오겟다
+
+        if(token == NULL) continue;
+            strcpy(new_mem[account_cnt].id, token);
+            token = strtok(NULL, ",");
+
+        if (token == NULL) continue;
+            strcpy(new_mem[account_cnt].password, token);
+            token = strtok(NULL, ",");
+
+        if (token == NULL) continue;
+            strcpy(new_mem[account_cnt].name, token);
+            token = strtok(NULL, ",");
+
+        if (token == NULL) continue;
+            new_mem[account_cnt].age = atoi(token);
+            token = strtok(NULL, ",");
+
+        if (token == NULL) continue;
+            strcpy(new_mem[account_cnt].phone_num, token);
+        
+        account_cnt++;
+    }
+    fclose(file);
+
+    // for (int j = 0; j < count; j++)
+    // {
+    //     printf("회원 %d: %s, %s, %s, %d, %s\n", j+1, new_mem[j].id, new_mem[j].password, new_mem[j].name, new_mem[j].age, new_mem[j].phone_num);
+    // }
 }
