@@ -38,18 +38,24 @@ void store_to_article_struct();
 
 void delete_a_article_from_articles();
 struct article articles[300]; 
+
 member new_mem[100];
+
 
 int articles_cnt;
 int account_cnt;
 
 // 회원 아이디로 검색!
-member retrieve_id_from_member();
+void retrieve_id_from_member();
 
 
 int main()
 {  
-   
+    
+    
+    retrieve_id_from_member();
+
+  
 
     return 0;
 }
@@ -87,44 +93,48 @@ void delete_a_article_from_articles(int del_index)
 }
 
 // 매개변수로 유저 id를 받아야 합니다.
-member retrieve_id_from_member()
+void  retrieve_id_from_member()
 {
-     
     
+    int cnt=0;
     csv_to_struct_mem();
 
     //매개변수를 넣을곳!
-    char finding_id[50]="qwer6";  //김알콜씨
+    char finding_id[50]="qwer";  //김알콜씨
 
-    member already_joined;
-    for(int i=0; i<account_cnt; i++)
-    {
-        
-        // 찾아요
-        if(strcmp(finding_id, new_mem[i].id)==0)
+    // member *aj = (member*)malloc(sizeof(member)*10);
+    char *ptr;
+    // memset(aj,0,sizeof(aj)*10);    
+    int index_[10]={0,};
+        // printf("아나 머라는거야 이건%d", account_cnt);
+        for(int i=0; i<account_cnt;i++)
         {
-            //있다!
-            strcpy(already_joined.id,new_mem[i].id);
-            strcpy(already_joined.password,new_mem[i].password);
-            strcpy(already_joined.name, new_mem[i].name);
-            strcpy(already_joined.phone_num, new_mem[i].phone_num);
-            already_joined.age=new_mem[i].age;
-           
+            //    csv파일의 id            qwer
+        ptr = strstr(new_mem[i].id,finding_id);
+            if(ptr!=NULL)
+            {
+                // printf("%d번째 검색 내용입니다.", i);
+                // printf("%s\n",new_mem[i].id);
+                // printf("%s\n",new_mem[i].password);
+                // printf("%s\n",new_mem[i].name);
+                // printf("%s\n",new_mem[i].phone_num);
 
-        }else{
-            
-            /* 만약 enum에 정의한 오류를 리턴하도록 하면 이 함수의 리턴방식은 int로 단순해진다.  */ 
-            //없는경우 뭘 리턴해야할까유?
-            // return NO_MEMBER;  
-        }
+                // printf("%d\n",new_mem[i].age);       
 
+                // strcpy(aj[0].id,new_mem[i].id);
+                // strcpy(aj[0].password,new_mem[i].password);
+                // strcpy(aj[0].name,new_mem[i].name);
+                // strcpy(aj[0].phone_num,new_mem[i].phone_num);
+                // aj[0].age = new_mem[i].age;
+            index_[cnt]=i;
+            cnt++;
+            }
+        }  
 
-    }
+        
     
-    // printf("가져온내용 %s", new_mem[4].id);
-    printf("가져온내용 %s", already_joined.name);
 
-    return already_joined;
+    return index_;
 
 }
 
@@ -381,8 +391,5 @@ void csv_to_struct_mem() {  // 멤버 csv 내부 텍스트 메인함수 구조�
     }
     fclose(file);
 
-    // for (int j = 0; j < count; j++)
-    // {
-    //     printf("회원 %d: %s, %s, %s, %d, %s\n", j+1, new_mem[j].id, new_mem[j].password, new_mem[j].name, new_mem[j].age, new_mem[j].phone_num);
-    // }
+
 }

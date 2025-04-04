@@ -18,6 +18,8 @@
         "string.h": "c",
         "socket.h": "c",
         "unistd.h": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "struct_member.h": "c",
+        "algorithm": "c"
     }
 }
