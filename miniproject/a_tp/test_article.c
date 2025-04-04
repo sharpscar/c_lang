@@ -29,32 +29,24 @@ int articles_cnt;
 
 int main()
 {  
-    // ./article.csv 파일의 내용을 구조체 변수에 담는 함수
+    // delete_a_article_from_articles(7); 7번글이 삭제!
+    return 0;
+}
+void delete_a_article_from_articles(int del_index)
+{
+     // ./article.csv 파일의 내용을 구조체 변수에 담는 함수
     // 호출후 articles라는 구조체 배열에 모두 담는다.
     store_to_article_struct(); 
 
     // 6번인덱스를 지우고싶다면 
     // 이건 삭제를 위한 인덱스 추후 삭제하고자 하는 인덱스를 입력받음
-    int delete_index = 7; 
+    int delete_index= del_index; 
     //
     //삭제하는 내용!
     for(int i=delete_index; i<30; i++)
     {
         articles[i] = articles[i+1];
     }
-
-   
-
-    // printf("======================삭제후===================================\n");
-    // for (int i=0; i < 20; i++)
-    // {
-    //     printf("인덱스!! %d \n", i);
-    //     printf("글제목 : %s \n",articles[i].article_title);
-    //     printf("글내용 : %s \n",articles[i].article_content);
-        
-    // }
-    //삭제 확인 구조체 배열에서 해당 인덱스가 삭제된것을 확인함.
-
     //파일에 씁시다! 조심 w는 재앙이야!
     FILE *file = fopen("./article.csv","w");
     if(file==NULL)
@@ -62,15 +54,6 @@ int main()
         printf("파일을 열수 없습니다.\n");
         
     }
-    //배열의 크기만큼 반복! 지금은 20라인줄정도 되니까 강제로 20번 반복한다고 생각함
-    //추후 articl.csv 행의 크기를 알아오는 변수를 준비하도록!
-    /** 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간  <<-- 입력을 받아서 글등록하도록 변경 예정 */  
-    // fprintf(file, "%d,%s,%s,%s,%s,%d\n",
-    //     articles->article_id,articles->article_title,
-    //     articles->article_content,articles->writer_id,
-    //     articles->reciever_id,articles->wrtie_time
-    // );
-
     for(int i=0; i<articles_cnt; i++)
     {
         fprintf(file, "%d,%s,%s,%s,%s,%d\n",
@@ -80,8 +63,8 @@ int main()
     }
 
     fclose(file);
-    return 0;
 }
+
 
 void store_to_article_struct()
 {
