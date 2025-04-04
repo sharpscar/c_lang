@@ -2,7 +2,7 @@
 #include <string.h>
 #include <time.h>
 
-// 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간 
+// 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간 글
 struct article {
     int article_id;
     char article_title[50];
@@ -22,6 +22,7 @@ void write_a_article();
 int main()
 {  
 
+    // show_article_list();
     write_a_article();
 
     
@@ -59,7 +60,7 @@ void write_a_article()
     /** 글번호 / 글제목/ 컨텐츠/ 글작성자/ 받는분/ 작성시간  <<-- 입력을 받아서 글등록하도록 변경 예정 */  
     // fprintf(file, "16,돼지고기를 먹는방법, 언제든먹을수 있지, %s, ,%d, \n", user_id, seconds);  
     fprintf(file ,"%d, %s,%s,%s,%d", a.article_id,a.article_title, a.article_content,a.user_id,a.wrtie_time );
-    
+
     fclose(file);
 }
 
@@ -70,9 +71,10 @@ struct article get_input()
     char content[500];
 
     printf("글 제목을 입력해주세요\n");
-    scanf("%s", title);
+    scanf("%[^\n]", title);
+    getchar();
     printf("글 내용을 입력해주세요\n");
-    scanf("%s", content);
+    scanf("%[^\n]", content);
 
     // printf("%s\t%s", title, content);
     strcpy(a.article_title, title);
