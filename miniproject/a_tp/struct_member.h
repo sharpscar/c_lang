@@ -7,3 +7,12 @@ typedef struct
     char phone_num[20];
 
 }member;
+
+typedef struct  {
+    int article_id;
+    char article_title[50];
+    char article_content[500];
+    char writer_id[50];
+    char reciever_id[50];
+    int wrtie_time;
+}article;
