@@ -68,13 +68,13 @@ void admin_can_check_account_info();
 
 int main()
 {  
-    // csv_to_struct_mem();     //account_cnt , new_mem 
+   
+    // delete_a_article_from_articles(4);
+   
+    // write_a_admin_article();
+    // delete_a_article_from_admin_articles(4);
 
-    // show_article_list();
-
-    write_a_article();
-    
-
+    order_by_account_name();
 
     return 0;
 }
@@ -135,14 +135,16 @@ void delete_a_article_from_admin_articles(int del_index)
 {
      // ./admin_article.csv 파일의 내용을 구조체 변수에 담는 함수
     // 호출후 admin_articles라는 구조체 배열에 모두 담는다.
+    admin_articles_cnt=0;
     store_to_admin_article_struct(); 
 
     // 6번인덱스를 지우고싶다면 
     // 이건 삭제를 위한 인덱스 추후 삭제하고자 하는 인덱스를 입력받음
-    int delete_index= del_index; 
+    
+
     //
     //삭제하는 내용!
-    for(int i=delete_index; i<30; i++)
+    for(int i=del_index; i<admin_articles_cnt; i++)
     {
         admin_articles[i] = admin_articles[i+1];
     }
@@ -153,17 +155,22 @@ void delete_a_article_from_admin_articles(int del_index)
         printf("파일을 열수 없습니다.\n");
         
     }
-    printf("어디민 글의 갯수를 몇개로 파악하느뇨? %d", admin_articles_cnt);
     for(int i=0; i<admin_articles_cnt; i++)
     {
 
-        if(admin_articles[i].article_id!=NULL && admin_articles[i].article_id!="")
+        // if(articles[i].article_id!=0)
+        
+        if(admin_articles[i].article_id!=0)
         {               
             fprintf(file, "%d|%s|%s|%s|%s|%d|%s|%d\n",
-                admin_articles[i].article_id,admin_articles[i].article_title,
-                admin_articles[i].article_content,admin_articles[i].writer_id,
-                admin_articles[i].reciever_id,admin_articles[i].write_time_1,
-                admin_articles[i].write_time_2, admin_articles[i].read_count );
+                admin_articles[i].article_id,
+                admin_articles[i].article_title,
+                admin_articles[i].article_content,
+                admin_articles[i].writer_id,
+                admin_articles[i].reciever_id,
+                admin_articles[i].write_time_1,
+                admin_articles[i].write_time_2, 
+                admin_articles[i].read_count );
         }
         
     }
@@ -177,17 +184,26 @@ void delete_a_article_from_articles(int del_index)
 {
      // ./article.txt 파일의 내용을 구조체 변수에 담는 함수
     // 호출후 articles라는 구조체 배열에 모두 담는다.
+    articles_cnt=0;
     store_to_article_struct(); 
 
     // 6번인덱스를 지우고싶다면 
     // 이건 삭제를 위한 인덱스 추후 삭제하고자 하는 인덱스를 입력받음
-    int delete_index= del_index; 
+    
     //
     //삭제하는 내용!
-    for(int i=delete_index; i<30; i++)
+    for(int i=del_index-1; i<articles_cnt; i++)
     {
         articles[i] = articles[i+1];
     }
+
+    // printf(" 글의 갯수를 몇개로 파악하느뇨? %d\n", articles_cnt);
+
+    for(int i=0; i<articles_cnt; i++)
+    {
+        printf("id: %d ,content : %s\n",articles[i].article_id,articles[i].article_content);
+    }
+
     //파일에 씁시다! 조심 w는 재앙이야!
     FILE *file = fopen("./article.txt","w");
     if(file==NULL)
@@ -195,17 +211,24 @@ void delete_a_article_from_articles(int del_index)
         printf("파일을 열수 없습니다.\n");
         
     }
+
     for(int i=0; i<articles_cnt; i++)
     {
-        if(articles[i].article_id!=NULL && articles[i].article_id!="")
+        if(articles[i].article_id!=0)
         {
-            fprintf(file, "%d|%s|%s|%s|%s|%d\n",
-                articles[i].article_id,articles[i].article_title,
-                articles[i].article_content,articles[i].write_time_1,
-                articles[i].write_time_2, articles[i].read_count);
+            fprintf(file, "%d|%s|%s|%s|%s|%d|%s|%d\n",
+                articles[i].article_id, 
+                articles[i].article_title,
+                articles[i].article_content,
+                articles[i].writer_id,
+                articles[i].reciever_id,
+                articles[i].write_time_1,
+                articles[i].write_time_2, 
+                articles[i].read_count
+            );
+        } 
 
-        }
-        
+                
     }
 
     fclose(file);
@@ -432,6 +455,7 @@ void store_to_article_struct()
            }
            else if(field_count==5)
            {
+            //시간_1 (int ) 정렬하기위해 존재
             int write_time;
             write_time=atoi(token);
             articles[row_count].write_time_1 = write_time;
